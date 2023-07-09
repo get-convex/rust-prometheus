@@ -1178,7 +1178,7 @@ macro_rules! register_vmhistogram_with_registry {
     };
 
     ($HOPTS:expr, $REGISTRY:expr $(,)?) => {{
-        let histogram = $crate::Histogram::with_opts($HOPTS).unwrap();
+        let histogram = $crate::VMHistogram::with_opts($HOPTS).unwrap();
         $REGISTRY
             .register(Box::new(histogram.clone()))
             .map(|_| histogram)
