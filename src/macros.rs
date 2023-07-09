@@ -1144,3 +1144,58 @@ fn test_register_histogram_vec_with_registry_trailing_comma() {
     );
     assert!(histogram_vec.is_ok());
 }
+
+#[allow(missing_docs)]
+#[macro_export(local_inner_macros)]
+macro_rules! register_vmhistogram {
+    ($NAME:expr, $HELP:expr $(,)?) => {
+        register_vmhistogram!(opts!($NAME, $HELP))
+    };
+    ($HOPTS:expr $(,)?) => {{
+        let histogram = $crate::VMHistogram::with_opts($HOPTS).unwrap();
+        $crate::register(Box::new(histogram.clone())).map(|_| histogram)
+    }};
+}
+
+#[allow(missing_docs)]
+#[macro_export(local_inner_macros)]
+macro_rules! register_vmhistogram_vec {
+    ($HOPTS:expr, $LABELS_NAMES:expr $(,)?) => {{
+        let histogram_vec = $crate::VMHistogramVec::new($HOPTS, $LABELS_NAMES).unwrap();
+        $crate::register(Box::new(histogram_vec.clone())).map(|_| histogram_vec)
+    }};
+
+    ($NAME:expr, $HELP:expr, $LABELS_NAMES:expr $(,)?) => {{
+        register_vmhistogram_vec!(opts!($NAME, $HELP), $LABELS_NAMES)
+    }};
+}
+
+#[allow(missing_docs)]
+#[macro_export(local_inner_macros)]
+macro_rules! register_vmhistogram_with_registry {
+    ($NAME:expr, $HELP:expr, $REGISTRY:expr $(,)?) => {
+        register_vmhistogram_with_registry!(opts!($NAME, $HELP), $REGISTRY)
+    };
+
+    ($HOPTS:expr, $REGISTRY:expr $(,)?) => {{
+        let histogram = $crate::Histogram::with_opts($HOPTS).unwrap();
+        $REGISTRY
+            .register(Box::new(histogram.clone()))
+            .map(|_| histogram)
+    }};
+}
+
+#[allow(missing_docs)]
+#[macro_export(local_inner_macros)]
+macro_rules! register_vmhistogram_vec_with_registry {
+    ($HOPTS:expr, $LABELS_NAMES:expr, $REGISTRY:expr $(,)?) => {{
+        let histogram_vec = $crate::VMHistogramVec::new($HOPTS, $LABELS_NAMES).unwrap();
+        $REGISTRY
+            .register(Box::new(histogram_vec.clone()))
+            .map(|_| histogram_vec)
+    }};
+
+    ($NAME:expr, $HELP:expr, $LABELS_NAMES:expr, $REGISTRY:expr $(,)?) => {{
+        register_vmhistogram_vec_with_registry!(opts!($NAME, $HELP), $LABELS_NAMES, $REGISTRY)
+    }};
+}

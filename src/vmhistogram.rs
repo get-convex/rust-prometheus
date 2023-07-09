@@ -50,7 +50,7 @@ struct Inner {
     sum: f64,
 }
 
-#[allow(missing_debug_implementations)]
+#[allow(missing_debug_implementations, missing_docs)]
 #[derive(Clone)]
 pub struct VMHistogram {
     inner: Arc<Mutex<Inner>>,
@@ -59,10 +59,12 @@ pub struct VMHistogram {
 }
 
 impl VMHistogram {
+    #[allow(missing_docs)]
     pub fn with_opts(opts: &Opts) -> crate::Result<Self> {
         VMHistogram::with_opts_and_label_values(opts, &[])
     }
 
+    #[allow(missing_docs)]
     pub fn with_opts_and_label_values(opts: &Opts, label_values: &[&str]) -> crate::Result<Self> {
         let desc = opts.describe()?;
 
@@ -74,6 +76,7 @@ impl VMHistogram {
         })
     }
 
+    #[allow(missing_docs)]
     pub fn observe(&self, value: f64) {
         if value.is_nan() || value.is_sign_negative() {
             return;
@@ -156,6 +159,7 @@ impl Collector for VMHistogram {
     }
 }
 
+#[allow(missing_docs)]
 pub type VMHistogramVec = MetricVec<VMHistogramVecBuilder>;
 
 impl VMHistogramVec {
