@@ -114,7 +114,7 @@ impl ::protobuf::Message for LabelPair {
         true
     }
 
-    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
         while !is.eof()? {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
@@ -147,7 +147,7 @@ impl ::protobuf::Message for LabelPair {
         my_size
     }
 
-    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
         if let Some(ref v) = self.name.as_ref() {
             os.write_string(1, &v)?;
         }
@@ -235,13 +235,13 @@ impl ::protobuf::Clear for LabelPair {
 }
 
 impl ::std::fmt::Debug for LabelPair {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         ::protobuf::text_format::fmt(self, f)
     }
 }
 
 impl ::protobuf::reflect::ProtobufValue for LabelPair {
-    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef<'_> {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
     }
 }
@@ -285,7 +285,7 @@ impl ::protobuf::Message for Gauge {
         true
     }
 
-    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
         while !is.eof()? {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
@@ -316,7 +316,7 @@ impl ::protobuf::Message for Gauge {
         my_size
     }
 
-    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
         if let Some(v) = self.value {
             os.write_double(1, v)?;
         }
@@ -395,13 +395,13 @@ impl ::protobuf::Clear for Gauge {
 }
 
 impl ::std::fmt::Debug for Gauge {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         ::protobuf::text_format::fmt(self, f)
     }
 }
 
 impl ::protobuf::reflect::ProtobufValue for Gauge {
-    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef<'_> {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
     }
 }
@@ -445,7 +445,7 @@ impl ::protobuf::Message for Counter {
         true
     }
 
-    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
         while !is.eof()? {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
@@ -476,7 +476,7 @@ impl ::protobuf::Message for Counter {
         my_size
     }
 
-    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
         if let Some(v) = self.value {
             os.write_double(1, v)?;
         }
@@ -555,13 +555,13 @@ impl ::protobuf::Clear for Counter {
 }
 
 impl ::std::fmt::Debug for Counter {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         ::protobuf::text_format::fmt(self, f)
     }
 }
 
 impl ::protobuf::reflect::ProtobufValue for Counter {
-    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef<'_> {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
     }
 }
@@ -625,7 +625,7 @@ impl ::protobuf::Message for Quantile {
         true
     }
 
-    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
         while !is.eof()? {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
@@ -666,7 +666,7 @@ impl ::protobuf::Message for Quantile {
         my_size
     }
 
-    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
         if let Some(v) = self.quantile {
             os.write_double(1, v)?;
         }
@@ -754,13 +754,13 @@ impl ::protobuf::Clear for Quantile {
 }
 
 impl ::std::fmt::Debug for Quantile {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         ::protobuf::text_format::fmt(self, f)
     }
 }
 
 impl ::protobuf::reflect::ProtobufValue for Quantile {
-    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef<'_> {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
     }
 }
@@ -855,7 +855,7 @@ impl ::protobuf::Message for Summary {
         true
     }
 
-    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
         while !is.eof()? {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
@@ -903,7 +903,7 @@ impl ::protobuf::Message for Summary {
         my_size
     }
 
-    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
         if let Some(v) = self.sample_count {
             os.write_uint64(1, v)?;
         }
@@ -1002,13 +1002,13 @@ impl ::protobuf::Clear for Summary {
 }
 
 impl ::std::fmt::Debug for Summary {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         ::protobuf::text_format::fmt(self, f)
     }
 }
 
 impl ::protobuf::reflect::ProtobufValue for Summary {
-    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef<'_> {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
     }
 }
@@ -1052,7 +1052,7 @@ impl ::protobuf::Message for Untyped {
         true
     }
 
-    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
         while !is.eof()? {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
@@ -1083,7 +1083,7 @@ impl ::protobuf::Message for Untyped {
         my_size
     }
 
-    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
         if let Some(v) = self.value {
             os.write_double(1, v)?;
         }
@@ -1162,13 +1162,13 @@ impl ::protobuf::Clear for Untyped {
 }
 
 impl ::std::fmt::Debug for Untyped {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         ::protobuf::text_format::fmt(self, f)
     }
 }
 
 impl ::protobuf::reflect::ProtobufValue for Untyped {
-    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef<'_> {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
     }
 }
@@ -1263,7 +1263,7 @@ impl ::protobuf::Message for Histogram {
         true
     }
 
-    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
         while !is.eof()? {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
@@ -1311,7 +1311,7 @@ impl ::protobuf::Message for Histogram {
         my_size
     }
 
-    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
         if let Some(v) = self.sample_count {
             os.write_uint64(1, v)?;
         }
@@ -1410,13 +1410,13 @@ impl ::protobuf::Clear for Histogram {
 }
 
 impl ::std::fmt::Debug for Histogram {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         ::protobuf::text_format::fmt(self, f)
     }
 }
 
 impl ::protobuf::reflect::ProtobufValue for Histogram {
-    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef<'_> {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
     }
 }
@@ -1480,7 +1480,7 @@ impl ::protobuf::Message for Bucket {
         true
     }
 
-    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
         while !is.eof()? {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
@@ -1521,7 +1521,7 @@ impl ::protobuf::Message for Bucket {
         my_size
     }
 
-    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
         if let Some(v) = self.cumulative_count {
             os.write_uint64(1, v)?;
         }
@@ -1609,13 +1609,13 @@ impl ::protobuf::Clear for Bucket {
 }
 
 impl ::std::fmt::Debug for Bucket {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         ::protobuf::text_format::fmt(self, f)
     }
 }
 
 impl ::protobuf::reflect::ProtobufValue for Bucket {
-    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef<'_> {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
     }
 }
@@ -1630,6 +1630,7 @@ pub struct Metric {
     untyped: ::protobuf::SingularPtrField<Untyped>,
     histogram: ::protobuf::SingularPtrField<Histogram>,
     timestamp_ms: ::std::option::Option<i64>,
+    vm_histogram: ::protobuf::SingularPtrField<VMHistogram>,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -1848,6 +1849,39 @@ impl Metric {
     pub fn get_timestamp_ms(&self) -> i64 {
         self.timestamp_ms.unwrap_or(0)
     }
+
+    // optional .io.prometheus.client.VMHistogram vm_histogram = 8;
+
+    pub fn clear_vm_histogram(&mut self) {
+        self.vm_histogram.clear();
+    }
+
+    pub fn has_vm_histogram(&self) -> bool {
+        self.vm_histogram.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_vm_histogram(&mut self, v: VMHistogram) {
+        self.vm_histogram = ::protobuf::SingularPtrField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_vm_histogram(&mut self) -> &mut VMHistogram {
+        if self.vm_histogram.is_none() {
+            self.vm_histogram.set_default();
+        }
+        self.vm_histogram.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_vm_histogram(&mut self) -> VMHistogram {
+        self.vm_histogram.take().unwrap_or_else(|| VMHistogram::new())
+    }
+
+    pub fn get_vm_histogram(&self) -> &VMHistogram {
+        self.vm_histogram.as_ref().unwrap_or_else(|| VMHistogram::default_instance())
+    }
 }
 
 impl ::protobuf::Message for Metric {
@@ -1882,10 +1916,15 @@ impl ::protobuf::Message for Metric {
                 return false;
             }
         };
+        for v in &self.vm_histogram {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
         true
     }
 
-    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
         while !is.eof()? {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
@@ -1913,6 +1952,9 @@ impl ::protobuf::Message for Metric {
                     }
                     let tmp = is.read_int64()?;
                     self.timestamp_ms = ::std::option::Option::Some(tmp);
+                },
+                8 => {
+                    ::protobuf::rt::read_singular_message_into(wire_type, is, &mut self.vm_histogram)?;
                 },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
@@ -1953,12 +1995,16 @@ impl ::protobuf::Message for Metric {
         if let Some(v) = self.timestamp_ms {
             my_size += ::protobuf::rt::value_size(6, v, ::protobuf::wire_format::WireTypeVarint);
         }
+        if let Some(ref v) = self.vm_histogram.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
         my_size
     }
 
-    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
         for v in &self.label {
             os.write_tag(1, ::protobuf::wire_format::WireTypeLengthDelimited)?;
             os.write_raw_varint32(v.get_cached_size())?;
@@ -1991,6 +2037,11 @@ impl ::protobuf::Message for Metric {
         }
         if let Some(v) = self.timestamp_ms {
             os.write_int64(6, v)?;
+        }
+        if let Some(ref v) = self.vm_histogram.as_ref() {
+            os.write_tag(8, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -2069,6 +2120,11 @@ impl ::protobuf::Message for Metric {
                     |m: &Metric| { &m.timestamp_ms },
                     |m: &mut Metric| { &mut m.timestamp_ms },
                 ));
+                fields.push(::protobuf::reflect::accessor::make_singular_ptr_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<VMHistogram>>(
+                    "vm_histogram",
+                    |m: &Metric| { &m.vm_histogram },
+                    |m: &mut Metric| { &mut m.vm_histogram },
+                ));
                 ::protobuf::reflect::MessageDescriptor::new::<Metric>(
                     "Metric",
                     fields,
@@ -2098,18 +2154,19 @@ impl ::protobuf::Clear for Metric {
         self.clear_untyped();
         self.clear_histogram();
         self.clear_timestamp_ms();
+        self.clear_vm_histogram();
         self.unknown_fields.clear();
     }
 }
 
 impl ::std::fmt::Debug for Metric {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         ::protobuf::text_format::fmt(self, f)
     }
 }
 
 impl ::protobuf::reflect::ProtobufValue for Metric {
-    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef<'_> {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
     }
 }
@@ -2258,7 +2315,7 @@ impl ::protobuf::Message for MetricFamily {
         true
     }
 
-    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
         while !is.eof()? {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
@@ -2304,7 +2361,7 @@ impl ::protobuf::Message for MetricFamily {
         my_size
     }
 
-    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
         if let Some(ref v) = self.name.as_ref() {
             os.write_string(1, &v)?;
         }
@@ -2412,13 +2469,473 @@ impl ::protobuf::Clear for MetricFamily {
 }
 
 impl ::std::fmt::Debug for MetricFamily {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         ::protobuf::text_format::fmt(self, f)
     }
 }
 
 impl ::protobuf::reflect::ProtobufValue for MetricFamily {
-    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef<'_> {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
+pub struct VMHistogram {
+    // message fields
+    sample_count: ::std::option::Option<u64>,
+    sample_sum: ::std::option::Option<f64>,
+    ranges: ::protobuf::RepeatedField<VMRange>,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl VMHistogram {
+    pub fn new() -> VMHistogram {
+        ::std::default::Default::default()
+    }
+
+    // optional uint64 sample_count = 1;
+
+    pub fn clear_sample_count(&mut self) {
+        self.sample_count = ::std::option::Option::None;
+    }
+
+    pub fn has_sample_count(&self) -> bool {
+        self.sample_count.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_sample_count(&mut self, v: u64) {
+        self.sample_count = ::std::option::Option::Some(v);
+    }
+
+    pub fn get_sample_count(&self) -> u64 {
+        self.sample_count.unwrap_or(0)
+    }
+
+    // optional double sample_sum = 2;
+
+    pub fn clear_sample_sum(&mut self) {
+        self.sample_sum = ::std::option::Option::None;
+    }
+
+    pub fn has_sample_sum(&self) -> bool {
+        self.sample_sum.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_sample_sum(&mut self, v: f64) {
+        self.sample_sum = ::std::option::Option::Some(v);
+    }
+
+    pub fn get_sample_sum(&self) -> f64 {
+        self.sample_sum.unwrap_or(0.)
+    }
+
+    // repeated .io.prometheus.client.VMRange ranges = 3;
+
+    pub fn clear_ranges(&mut self) {
+        self.ranges.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_ranges(&mut self, v: ::protobuf::RepeatedField<VMRange>) {
+        self.ranges = v;
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_ranges(&mut self) -> &mut ::protobuf::RepeatedField<VMRange> {
+        &mut self.ranges
+    }
+
+    // Take field
+    pub fn take_ranges(&mut self) -> ::protobuf::RepeatedField<VMRange> {
+        ::std::mem::replace(&mut self.ranges, ::protobuf::RepeatedField::new())
+    }
+
+    pub fn get_ranges(&self) -> &[VMRange] {
+        &self.ranges
+    }
+}
+
+impl ::protobuf::Message for VMHistogram {
+    fn is_initialized(&self) -> bool {
+        for v in &self.ranges {
+            if !v.is_initialized() {
+                return false;
+            }
+        };
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.sample_count = ::std::option::Option::Some(tmp);
+                },
+                2 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeFixed64 {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_double()?;
+                    self.sample_sum = ::std::option::Option::Some(tmp);
+                },
+                3 => {
+                    ::protobuf::rt::read_repeated_message_into(wire_type, is, &mut self.ranges)?;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if let Some(v) = self.sample_count {
+            my_size += ::protobuf::rt::value_size(1, v, ::protobuf::wire_format::WireTypeVarint);
+        }
+        if let Some(v) = self.sample_sum {
+            my_size += 9;
+        }
+        for value in &self.ranges {
+            let len = value.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint32_size(len) + len;
+        };
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if let Some(v) = self.sample_count {
+            os.write_uint64(1, v)?;
+        }
+        if let Some(v) = self.sample_sum {
+            os.write_double(2, v)?;
+        }
+        for v in &self.ranges {
+            os.write_tag(3, ::protobuf::wire_format::WireTypeLengthDelimited)?;
+            os.write_raw_varint32(v.get_cached_size())?;
+            v.write_to_with_cached_sizes(os)?;
+        };
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &::std::any::Any {
+        self as &::std::any::Any
+    }
+    fn as_any_mut(&mut self) -> &mut ::std::any::Any {
+        self as &mut ::std::any::Any
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<::std::any::Any> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> VMHistogram {
+        VMHistogram::new()
+    }
+
+    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
+        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const ::protobuf::reflect::MessageDescriptor,
+        };
+        unsafe {
+            descriptor.get(|| {
+                let mut fields = ::std::vec::Vec::new();
+                fields.push(::protobuf::reflect::accessor::make_option_accessor::<_, ::protobuf::types::ProtobufTypeUint64>(
+                    "sample_count",
+                    |m: &VMHistogram| { &m.sample_count },
+                    |m: &mut VMHistogram| { &mut m.sample_count },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_option_accessor::<_, ::protobuf::types::ProtobufTypeDouble>(
+                    "sample_sum",
+                    |m: &VMHistogram| { &m.sample_sum },
+                    |m: &mut VMHistogram| { &mut m.sample_sum },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_repeated_field_accessor::<_, ::protobuf::types::ProtobufTypeMessage<VMRange>>(
+                    "ranges",
+                    |m: &VMHistogram| { &m.ranges },
+                    |m: &mut VMHistogram| { &mut m.ranges },
+                ));
+                ::protobuf::reflect::MessageDescriptor::new::<VMHistogram>(
+                    "VMHistogram",
+                    fields,
+                    file_descriptor_proto()
+                )
+            })
+        }
+    }
+
+    fn default_instance() -> &'static VMHistogram {
+        static mut instance: ::protobuf::lazy::Lazy<VMHistogram> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const VMHistogram,
+        };
+        unsafe {
+            instance.get(VMHistogram::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for VMHistogram {
+    fn clear(&mut self) {
+        self.clear_sample_count();
+        self.clear_sample_sum();
+        self.clear_ranges();
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::std::fmt::Debug for VMHistogram {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for VMHistogram {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
+        ::protobuf::reflect::ProtobufValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
+pub struct VMRange {
+    // message fields
+    range: ::protobuf::SingularField<::std::string::String>,
+    count: ::std::option::Option<u64>,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl VMRange {
+    pub fn new() -> VMRange {
+        ::std::default::Default::default()
+    }
+
+    // optional string range = 1;
+
+    pub fn clear_range(&mut self) {
+        self.range.clear();
+    }
+
+    pub fn has_range(&self) -> bool {
+        self.range.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_range(&mut self, v: ::std::string::String) {
+        self.range = ::protobuf::SingularField::some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_range(&mut self) -> &mut ::std::string::String {
+        if self.range.is_none() {
+            self.range.set_default();
+        }
+        self.range.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_range(&mut self) -> ::std::string::String {
+        self.range.take().unwrap_or_else(|| ::std::string::String::new())
+    }
+
+    pub fn get_range(&self) -> &str {
+        match self.range.as_ref() {
+            Some(v) => &v,
+            None => "",
+        }
+    }
+
+    // optional uint64 count = 2;
+
+    pub fn clear_count(&mut self) {
+        self.count = ::std::option::Option::None;
+    }
+
+    pub fn has_count(&self) -> bool {
+        self.count.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_count(&mut self, v: u64) {
+        self.count = ::std::option::Option::Some(v);
+    }
+
+    pub fn get_count(&self) -> u64 {
+        self.count.unwrap_or(0)
+    }
+}
+
+impl ::protobuf::Message for VMRange {
+    fn is_initialized(&self) -> bool {
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_string_into(wire_type, is, &mut self.range)?;
+                },
+                2 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.count = ::std::option::Option::Some(tmp);
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if let Some(ref v) = self.range.as_ref() {
+            my_size += ::protobuf::rt::string_size(1, &v);
+        }
+        if let Some(v) = self.count {
+            my_size += ::protobuf::rt::value_size(2, v, ::protobuf::wire_format::WireTypeVarint);
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream) -> ::protobuf::ProtobufResult<()> {
+        if let Some(ref v) = self.range.as_ref() {
+            os.write_string(1, &v)?;
+        }
+        if let Some(v) = self.count {
+            os.write_uint64(2, v)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &::std::any::Any {
+        self as &::std::any::Any
+    }
+    fn as_any_mut(&mut self) -> &mut ::std::any::Any {
+        self as &mut ::std::any::Any
+    }
+    fn into_any(self: Box<Self>) -> ::std::boxed::Box<::std::any::Any> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> VMRange {
+        VMRange::new()
+    }
+
+    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
+        static mut descriptor: ::protobuf::lazy::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const ::protobuf::reflect::MessageDescriptor,
+        };
+        unsafe {
+            descriptor.get(|| {
+                let mut fields = ::std::vec::Vec::new();
+                fields.push(::protobuf::reflect::accessor::make_singular_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+                    "range",
+                    |m: &VMRange| { &m.range },
+                    |m: &mut VMRange| { &mut m.range },
+                ));
+                fields.push(::protobuf::reflect::accessor::make_option_accessor::<_, ::protobuf::types::ProtobufTypeUint64>(
+                    "count",
+                    |m: &VMRange| { &m.count },
+                    |m: &mut VMRange| { &mut m.count },
+                ));
+                ::protobuf::reflect::MessageDescriptor::new::<VMRange>(
+                    "VMRange",
+                    fields,
+                    file_descriptor_proto()
+                )
+            })
+        }
+    }
+
+    fn default_instance() -> &'static VMRange {
+        static mut instance: ::protobuf::lazy::Lazy<VMRange> = ::protobuf::lazy::Lazy {
+            lock: ::protobuf::lazy::ONCE_INIT,
+            ptr: 0 as *const VMRange,
+        };
+        unsafe {
+            instance.get(VMRange::new)
+        }
+    }
+}
+
+impl ::protobuf::Clear for VMRange {
+    fn clear(&mut self) {
+        self.clear_range();
+        self.clear_count();
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::std::fmt::Debug for VMRange {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for VMRange {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Message(self)
     }
 }
@@ -2430,6 +2947,7 @@ pub enum MetricType {
     SUMMARY = 2,
     UNTYPED = 3,
     HISTOGRAM = 4,
+    VMHISTOGRAM = 5,
 }
 
 impl ::protobuf::ProtobufEnum for MetricType {
@@ -2444,6 +2962,7 @@ impl ::protobuf::ProtobufEnum for MetricType {
             2 => ::std::option::Option::Some(MetricType::SUMMARY),
             3 => ::std::option::Option::Some(MetricType::UNTYPED),
             4 => ::std::option::Option::Some(MetricType::HISTOGRAM),
+            5 => ::std::option::Option::Some(MetricType::VMHISTOGRAM),
             _ => ::std::option::Option::None
         }
     }
@@ -2455,6 +2974,7 @@ impl ::protobuf::ProtobufEnum for MetricType {
             MetricType::SUMMARY,
             MetricType::UNTYPED,
             MetricType::HISTOGRAM,
+            MetricType::VMHISTOGRAM,
         ];
         values
     }
@@ -2476,42 +2996,195 @@ impl ::std::marker::Copy for MetricType {
 }
 
 impl ::protobuf::reflect::ProtobufValue for MetricType {
-    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef<'_> {
+    fn as_ref(&self) -> ::protobuf::reflect::ProtobufValueRef {
         ::protobuf::reflect::ProtobufValueRef::Enum(self.descriptor())
     }
 }
 
 static file_descriptor_proto_data: &'static [u8] = b"\
-    \n\x11proto_model.proto\x12\x14io.prometheus.client\"0\n\tLabelPair\x12\
-    \x10\n\x04name\x18\x01\x20\x01(\tB\x02\x18\0\x12\x11\n\x05value\x18\x02\
-    \x20\x01(\tB\x02\x18\0\"\x1a\n\x05Gauge\x12\x11\n\x05value\x18\x01\x20\
-    \x01(\x01B\x02\x18\0\"\x1c\n\x07Counter\x12\x11\n\x05value\x18\x01\x20\
-    \x01(\x01B\x02\x18\0\"3\n\x08Quantile\x12\x14\n\x08quantile\x18\x01\x20\
-    \x01(\x01B\x02\x18\0\x12\x11\n\x05value\x18\x02\x20\x01(\x01B\x02\x18\0\
-    \"q\n\x07Summary\x12\x18\n\x0csample_count\x18\x01\x20\x01(\x04B\x02\x18\
-    \0\x12\x16\n\nsample_sum\x18\x02\x20\x01(\x01B\x02\x18\0\x124\n\x08quant\
-    ile\x18\x03\x20\x03(\x0b2\x1e.io.prometheus.client.QuantileB\x02\x18\0\"\
-    \x1c\n\x07Untyped\x12\x11\n\x05value\x18\x01\x20\x01(\x01B\x02\x18\0\"o\
-    \n\tHistogram\x12\x18\n\x0csample_count\x18\x01\x20\x01(\x04B\x02\x18\0\
-    \x12\x16\n\nsample_sum\x18\x02\x20\x01(\x01B\x02\x18\0\x120\n\x06bucket\
-    \x18\x03\x20\x03(\x0b2\x1c.io.prometheus.client.BucketB\x02\x18\0\"?\n\
-    \x06Bucket\x12\x1c\n\x10cumulative_count\x18\x01\x20\x01(\x04B\x02\x18\0\
-    \x12\x17\n\x0bupper_bound\x18\x02\x20\x01(\x01B\x02\x18\0\"\xda\x02\n\
-    \x06Metric\x122\n\x05label\x18\x01\x20\x03(\x0b2\x1f.io.prometheus.clien\
-    t.LabelPairB\x02\x18\0\x12.\n\x05gauge\x18\x02\x20\x01(\x0b2\x1b.io.prom\
-    etheus.client.GaugeB\x02\x18\0\x122\n\x07counter\x18\x03\x20\x01(\x0b2\
-    \x1d.io.prometheus.client.CounterB\x02\x18\0\x122\n\x07summary\x18\x04\
-    \x20\x01(\x0b2\x1d.io.prometheus.client.SummaryB\x02\x18\0\x122\n\x07unt\
-    yped\x18\x05\x20\x01(\x0b2\x1d.io.prometheus.client.UntypedB\x02\x18\0\
-    \x126\n\thistogram\x18\x07\x20\x01(\x0b2\x1f.io.prometheus.client.Histog\
-    ramB\x02\x18\0\x12\x18\n\x0ctimestamp_ms\x18\x06\x20\x01(\x03B\x02\x18\0\
-    \"\x98\x01\n\x0cMetricFamily\x12\x10\n\x04name\x18\x01\x20\x01(\tB\x02\
-    \x18\0\x12\x10\n\x04help\x18\x02\x20\x01(\tB\x02\x18\0\x122\n\x04type\
-    \x18\x03\x20\x01(\x0e2\x20.io.prometheus.client.MetricTypeB\x02\x18\0\
-    \x120\n\x06metric\x18\x04\x20\x03(\x0b2\x1c.io.prometheus.client.MetricB\
-    \x02\x18\0*Q\n\nMetricType\x12\x0b\n\x07COUNTER\x10\0\x12\t\n\x05GAUGE\
-    \x10\x01\x12\x0b\n\x07SUMMARY\x10\x02\x12\x0b\n\x07UNTYPED\x10\x03\x12\r\
-    \n\tHISTOGRAM\x10\x04\x1a\x02\x10\0B\0b\x06proto2\
+    \n\x17proto/proto_model.proto\x12\x14io.prometheus.client\"5\n\tLabelPai\
+    r\x12\x12\n\x04name\x18\x01\x20\x01(\tR\x04name\x12\x14\n\x05value\x18\
+    \x02\x20\x01(\tR\x05value\"\x1d\n\x05Gauge\x12\x14\n\x05value\x18\x01\
+    \x20\x01(\x01R\x05value\"\x1f\n\x07Counter\x12\x14\n\x05value\x18\x01\
+    \x20\x01(\x01R\x05value\"<\n\x08Quantile\x12\x1a\n\x08quantile\x18\x01\
+    \x20\x01(\x01R\x08quantile\x12\x14\n\x05value\x18\x02\x20\x01(\x01R\x05v\
+    alue\"\x87\x01\n\x07Summary\x12!\n\x0csample_count\x18\x01\x20\x01(\x04R\
+    \x0bsampleCount\x12\x1d\n\nsample_sum\x18\x02\x20\x01(\x01R\tsampleSum\
+    \x12:\n\x08quantile\x18\x03\x20\x03(\x0b2\x1e.io.prometheus.client.Quant\
+    ileR\x08quantile\"\x1f\n\x07Untyped\x12\x14\n\x05value\x18\x01\x20\x01(\
+    \x01R\x05value\"\x83\x01\n\tHistogram\x12!\n\x0csample_count\x18\x01\x20\
+    \x01(\x04R\x0bsampleCount\x12\x1d\n\nsample_sum\x18\x02\x20\x01(\x01R\ts\
+    ampleSum\x124\n\x06bucket\x18\x03\x20\x03(\x0b2\x1c.io.prometheus.client\
+    .BucketR\x06bucket\"T\n\x06Bucket\x12)\n\x10cumulative_count\x18\x01\x20\
+    \x01(\x04R\x0fcumulativeCount\x12\x1f\n\x0bupper_bound\x18\x02\x20\x01(\
+    \x01R\nupperBound\"\xc5\x03\n\x06Metric\x125\n\x05label\x18\x01\x20\x03(\
+    \x0b2\x1f.io.prometheus.client.LabelPairR\x05label\x121\n\x05gauge\x18\
+    \x02\x20\x01(\x0b2\x1b.io.prometheus.client.GaugeR\x05gauge\x127\n\x07co\
+    unter\x18\x03\x20\x01(\x0b2\x1d.io.prometheus.client.CounterR\x07counter\
+    \x127\n\x07summary\x18\x04\x20\x01(\x0b2\x1d.io.prometheus.client.Summar\
+    yR\x07summary\x127\n\x07untyped\x18\x05\x20\x01(\x0b2\x1d.io.prometheus.\
+    client.UntypedR\x07untyped\x12=\n\thistogram\x18\x07\x20\x01(\x0b2\x1f.i\
+    o.prometheus.client.HistogramR\thistogram\x12!\n\x0ctimestamp_ms\x18\x06\
+    \x20\x01(\x03R\x0btimestampMs\x12D\n\x0cvm_histogram\x18\x08\x20\x01(\
+    \x0b2!.io.prometheus.client.VMHistogramR\x0bvmHistogram\"\xa2\x01\n\x0cM\
+    etricFamily\x12\x12\n\x04name\x18\x01\x20\x01(\tR\x04name\x12\x12\n\x04h\
+    elp\x18\x02\x20\x01(\tR\x04help\x124\n\x04type\x18\x03\x20\x01(\x0e2\x20\
+    .io.prometheus.client.MetricTypeR\x04type\x124\n\x06metric\x18\x04\x20\
+    \x03(\x0b2\x1c.io.prometheus.client.MetricR\x06metric\"\x86\x01\n\x0bVMH\
+    istogram\x12!\n\x0csample_count\x18\x01\x20\x01(\x04R\x0bsampleCount\x12\
+    \x1d\n\nsample_sum\x18\x02\x20\x01(\x01R\tsampleSum\x125\n\x06ranges\x18\
+    \x03\x20\x03(\x0b2\x1d.io.prometheus.client.VMRangeR\x06ranges\"5\n\x07V\
+    MRange\x12\x14\n\x05range\x18\x01\x20\x01(\tR\x05range\x12\x14\n\x05coun\
+    t\x18\x02\x20\x01(\x04R\x05count*^\n\nMetricType\x12\x0b\n\x07COUNTER\
+    \x10\0\x12\t\n\x05GAUGE\x10\x01\x12\x0b\n\x07SUMMARY\x10\x02\x12\x0b\n\
+    \x07UNTYPED\x10\x03\x12\r\n\tHISTOGRAM\x10\x04\x12\x0f\n\x0bVMHISTOGRAM\
+    \x10\x05B\x16\n\x14io.prometheus.clientJ\xad\x1b\n\x06\x12\x04\r\0]\x01\
+    \n\xbc\x04\n\x01\x0c\x12\x03\r\0\x122\xb1\x04\x20Copyright\x202013\x20Pr\
+    ometheus\x20Team\n\x20Licensed\x20under\x20the\x20Apache\x20License,\x20\
+    Version\x202.0\x20(the\x20\"License\");\n\x20you\x20may\x20not\x20use\
+    \x20this\x20file\x20except\x20in\x20compliance\x20with\x20the\x20License\
+    .\n\x20You\x20may\x20obtain\x20a\x20copy\x20of\x20the\x20License\x20at\n\
+    \n\x20http://www.apache.org/licenses/LICENSE-2.0\n\n\x20Unless\x20requir\
+    ed\x20by\x20applicable\x20law\x20or\x20agreed\x20to\x20in\x20writing,\
+    \x20software\n\x20distributed\x20under\x20the\x20License\x20is\x20distri\
+    buted\x20on\x20an\x20\"AS\x20IS\"\x20BASIS,\n\x20WITHOUT\x20WARRANTIES\
+    \x20OR\x20CONDITIONS\x20OF\x20ANY\x20KIND,\x20either\x20express\x20or\
+    \x20implied.\n\x20See\x20the\x20License\x20for\x20the\x20specific\x20lan\
+    guage\x20governing\x20permissions\x20and\n\x20limitations\x20under\x20th\
+    e\x20License.\n\n\x08\n\x01\x02\x12\x03\x0f\0\x1d\n\x08\n\x01\x08\x12\
+    \x03\x10\0-\n\t\n\x02\x08\x01\x12\x03\x10\0-\n\n\n\x02\x04\0\x12\x04\x12\
+    \0\x15\x01\n\n\n\x03\x04\0\x01\x12\x03\x12\x08\x11\n\x0b\n\x04\x04\0\x02\
+    \0\x12\x03\x13\x02\x1c\n\x0c\n\x05\x04\0\x02\0\x04\x12\x03\x13\x02\n\n\
+    \x0c\n\x05\x04\0\x02\0\x05\x12\x03\x13\x0b\x11\n\x0c\n\x05\x04\0\x02\0\
+    \x01\x12\x03\x13\x12\x16\n\x0c\n\x05\x04\0\x02\0\x03\x12\x03\x13\x1a\x1b\
+    \n\x0b\n\x04\x04\0\x02\x01\x12\x03\x14\x02\x1c\n\x0c\n\x05\x04\0\x02\x01\
+    \x04\x12\x03\x14\x02\n\n\x0c\n\x05\x04\0\x02\x01\x05\x12\x03\x14\x0b\x11\
+    \n\x0c\n\x05\x04\0\x02\x01\x01\x12\x03\x14\x12\x17\n\x0c\n\x05\x04\0\x02\
+    \x01\x03\x12\x03\x14\x1a\x1b\n\n\n\x02\x05\0\x12\x04\x17\0\x1e\x01\n\n\n\
+    \x03\x05\0\x01\x12\x03\x17\x05\x0f\n\x0b\n\x04\x05\0\x02\0\x12\x03\x18\
+    \x02\x11\n\x0c\n\x05\x05\0\x02\0\x01\x12\x03\x18\x02\t\n\x0c\n\x05\x05\0\
+    \x02\0\x02\x12\x03\x18\x0f\x10\n\x0b\n\x04\x05\0\x02\x01\x12\x03\x19\x02\
+    \x11\n\x0c\n\x05\x05\0\x02\x01\x01\x12\x03\x19\x02\x07\n\x0c\n\x05\x05\0\
+    \x02\x01\x02\x12\x03\x19\x0f\x10\n\x0b\n\x04\x05\0\x02\x02\x12\x03\x1a\
+    \x02\x11\n\x0c\n\x05\x05\0\x02\x02\x01\x12\x03\x1a\x02\t\n\x0c\n\x05\x05\
+    \0\x02\x02\x02\x12\x03\x1a\x0f\x10\n\x0b\n\x04\x05\0\x02\x03\x12\x03\x1b\
+    \x02\x11\n\x0c\n\x05\x05\0\x02\x03\x01\x12\x03\x1b\x02\t\n\x0c\n\x05\x05\
+    \0\x02\x03\x02\x12\x03\x1b\x0f\x10\n\x0b\n\x04\x05\0\x02\x04\x12\x03\x1c\
+    \x02\x11\n\x0c\n\x05\x05\0\x02\x04\x01\x12\x03\x1c\x02\x0b\n\x0c\n\x05\
+    \x05\0\x02\x04\x02\x12\x03\x1c\x0f\x10\n\x0b\n\x04\x05\0\x02\x05\x12\x03\
+    \x1d\x02\x12\n\x0c\n\x05\x05\0\x02\x05\x01\x12\x03\x1d\x02\r\n\x0c\n\x05\
+    \x05\0\x02\x05\x02\x12\x03\x1d\x10\x11\n\n\n\x02\x04\x01\x12\x04\x20\0\"\
+    \x01\n\n\n\x03\x04\x01\x01\x12\x03\x20\x08\r\n\x0b\n\x04\x04\x01\x02\0\
+    \x12\x03!\x02\x1c\n\x0c\n\x05\x04\x01\x02\0\x04\x12\x03!\x02\n\n\x0c\n\
+    \x05\x04\x01\x02\0\x05\x12\x03!\x0b\x11\n\x0c\n\x05\x04\x01\x02\0\x01\
+    \x12\x03!\x12\x17\n\x0c\n\x05\x04\x01\x02\0\x03\x12\x03!\x1a\x1b\n\n\n\
+    \x02\x04\x02\x12\x04$\0&\x01\n\n\n\x03\x04\x02\x01\x12\x03$\x08\x0f\n\
+    \x0b\n\x04\x04\x02\x02\0\x12\x03%\x02\x1c\n\x0c\n\x05\x04\x02\x02\0\x04\
+    \x12\x03%\x02\n\n\x0c\n\x05\x04\x02\x02\0\x05\x12\x03%\x0b\x11\n\x0c\n\
+    \x05\x04\x02\x02\0\x01\x12\x03%\x12\x17\n\x0c\n\x05\x04\x02\x02\0\x03\
+    \x12\x03%\x1a\x1b\n\n\n\x02\x04\x03\x12\x04(\0+\x01\n\n\n\x03\x04\x03\
+    \x01\x12\x03(\x08\x10\n\x0b\n\x04\x04\x03\x02\0\x12\x03)\x02\x1f\n\x0c\n\
+    \x05\x04\x03\x02\0\x04\x12\x03)\x02\n\n\x0c\n\x05\x04\x03\x02\0\x05\x12\
+    \x03)\x0b\x11\n\x0c\n\x05\x04\x03\x02\0\x01\x12\x03)\x12\x1a\n\x0c\n\x05\
+    \x04\x03\x02\0\x03\x12\x03)\x1d\x1e\n\x0b\n\x04\x04\x03\x02\x01\x12\x03*\
+    \x02\x1f\n\x0c\n\x05\x04\x03\x02\x01\x04\x12\x03*\x02\n\n\x0c\n\x05\x04\
+    \x03\x02\x01\x05\x12\x03*\x0b\x11\n\x0c\n\x05\x04\x03\x02\x01\x01\x12\
+    \x03*\x12\x17\n\x0c\n\x05\x04\x03\x02\x01\x03\x12\x03*\x1d\x1e\n\n\n\x02\
+    \x04\x04\x12\x04-\01\x01\n\n\n\x03\x04\x04\x01\x12\x03-\x08\x0f\n\x0b\n\
+    \x04\x04\x04\x02\0\x12\x03.\x02%\n\x0c\n\x05\x04\x04\x02\0\x04\x12\x03.\
+    \x02\n\n\x0c\n\x05\x04\x04\x02\0\x05\x12\x03.\x0b\x11\n\x0c\n\x05\x04\
+    \x04\x02\0\x01\x12\x03.\x14\x20\n\x0c\n\x05\x04\x04\x02\0\x03\x12\x03.#$\
+    \n\x0b\n\x04\x04\x04\x02\x01\x12\x03/\x02%\n\x0c\n\x05\x04\x04\x02\x01\
+    \x04\x12\x03/\x02\n\n\x0c\n\x05\x04\x04\x02\x01\x05\x12\x03/\x0b\x11\n\
+    \x0c\n\x05\x04\x04\x02\x01\x01\x12\x03/\x14\x1e\n\x0c\n\x05\x04\x04\x02\
+    \x01\x03\x12\x03/#$\n\x0b\n\x04\x04\x04\x02\x02\x12\x030\x02%\n\x0c\n\
+    \x05\x04\x04\x02\x02\x04\x12\x030\x02\n\n\x0c\n\x05\x04\x04\x02\x02\x06\
+    \x12\x030\x0b\x13\n\x0c\n\x05\x04\x04\x02\x02\x01\x12\x030\x14\x1c\n\x0c\
+    \n\x05\x04\x04\x02\x02\x03\x12\x030#$\n\n\n\x02\x04\x05\x12\x043\05\x01\
+    \n\n\n\x03\x04\x05\x01\x12\x033\x08\x0f\n\x0b\n\x04\x04\x05\x02\0\x12\
+    \x034\x02\x1c\n\x0c\n\x05\x04\x05\x02\0\x04\x12\x034\x02\n\n\x0c\n\x05\
+    \x04\x05\x02\0\x05\x12\x034\x0b\x11\n\x0c\n\x05\x04\x05\x02\0\x01\x12\
+    \x034\x12\x17\n\x0c\n\x05\x04\x05\x02\0\x03\x12\x034\x1a\x1b\n\n\n\x02\
+    \x04\x06\x12\x047\0;\x01\n\n\n\x03\x04\x06\x01\x12\x037\x08\x11\n\x0b\n\
+    \x04\x04\x06\x02\0\x12\x038\x02#\n\x0c\n\x05\x04\x06\x02\0\x04\x12\x038\
+    \x02\n\n\x0c\n\x05\x04\x06\x02\0\x05\x12\x038\x0b\x11\n\x0c\n\x05\x04\
+    \x06\x02\0\x01\x12\x038\x12\x1e\n\x0c\n\x05\x04\x06\x02\0\x03\x12\x038!\
+    \"\n\x0b\n\x04\x04\x06\x02\x01\x12\x039\x02#\n\x0c\n\x05\x04\x06\x02\x01\
+    \x04\x12\x039\x02\n\n\x0c\n\x05\x04\x06\x02\x01\x05\x12\x039\x0b\x11\n\
+    \x0c\n\x05\x04\x06\x02\x01\x01\x12\x039\x12\x1c\n\x0c\n\x05\x04\x06\x02\
+    \x01\x03\x12\x039!\"\nS\n\x04\x04\x06\x02\x02\x12\x03:\x02#\"F\x20Ordere\
+    d\x20in\x20increasing\x20order\x20of\x20upper_bound,\x20+Inf\x20bucket\
+    \x20is\x20optional.\n\n\x0c\n\x05\x04\x06\x02\x02\x04\x12\x03:\x02\n\n\
+    \x0c\n\x05\x04\x06\x02\x02\x06\x12\x03:\x0b\x11\n\x0c\n\x05\x04\x06\x02\
+    \x02\x01\x12\x03:\x12\x18\n\x0c\n\x05\x04\x06\x02\x02\x03\x12\x03:!\"\n\
+    \n\n\x02\x04\x07\x12\x04=\0@\x01\n\n\n\x03\x04\x07\x01\x12\x03=\x08\x0e\
+    \n.\n\x04\x04\x07\x02\0\x12\x03>\x02'\"!\x20Cumulative\x20in\x20increasi\
+    ng\x20order.\n\n\x0c\n\x05\x04\x07\x02\0\x04\x12\x03>\x02\n\n\x0c\n\x05\
+    \x04\x07\x02\0\x05\x12\x03>\x0b\x11\n\x0c\n\x05\x04\x07\x02\0\x01\x12\
+    \x03>\x12\"\n\x0c\n\x05\x04\x07\x02\0\x03\x12\x03>%&\n\x19\n\x04\x04\x07\
+    \x02\x01\x12\x03?\x02\"\"\x0c\x20Inclusive.\n\n\x0c\n\x05\x04\x07\x02\
+    \x01\x04\x12\x03?\x02\n\n\x0c\n\x05\x04\x07\x02\x01\x05\x12\x03?\x0b\x11\
+    \n\x0c\n\x05\x04\x07\x02\x01\x01\x12\x03?\x12\x1d\n\x0c\n\x05\x04\x07\
+    \x02\x01\x03\x12\x03?\x20!\n\n\n\x02\x04\x08\x12\x04B\0K\x01\n\n\n\x03\
+    \x04\x08\x01\x12\x03B\x08\x0e\n\x0b\n\x04\x04\x08\x02\0\x12\x03C\x02&\n\
+    \x0c\n\x05\x04\x08\x02\0\x04\x12\x03C\x02\n\n\x0c\n\x05\x04\x08\x02\0\
+    \x06\x12\x03C\x0b\x14\n\x0c\n\x05\x04\x08\x02\0\x01\x12\x03C\x15\x1a\n\
+    \x0c\n\x05\x04\x08\x02\0\x03\x12\x03C$%\n\x0b\n\x04\x04\x08\x02\x01\x12\
+    \x03D\x02&\n\x0c\n\x05\x04\x08\x02\x01\x04\x12\x03D\x02\n\n\x0c\n\x05\
+    \x04\x08\x02\x01\x06\x12\x03D\x0b\x10\n\x0c\n\x05\x04\x08\x02\x01\x01\
+    \x12\x03D\x15\x1a\n\x0c\n\x05\x04\x08\x02\x01\x03\x12\x03D$%\n\x0b\n\x04\
+    \x04\x08\x02\x02\x12\x03E\x02&\n\x0c\n\x05\x04\x08\x02\x02\x04\x12\x03E\
+    \x02\n\n\x0c\n\x05\x04\x08\x02\x02\x06\x12\x03E\x0b\x12\n\x0c\n\x05\x04\
+    \x08\x02\x02\x01\x12\x03E\x15\x1c\n\x0c\n\x05\x04\x08\x02\x02\x03\x12\
+    \x03E$%\n\x0b\n\x04\x04\x08\x02\x03\x12\x03F\x02&\n\x0c\n\x05\x04\x08\
+    \x02\x03\x04\x12\x03F\x02\n\n\x0c\n\x05\x04\x08\x02\x03\x06\x12\x03F\x0b\
+    \x12\n\x0c\n\x05\x04\x08\x02\x03\x01\x12\x03F\x15\x1c\n\x0c\n\x05\x04\
+    \x08\x02\x03\x03\x12\x03F$%\n\x0b\n\x04\x04\x08\x02\x04\x12\x03G\x02&\n\
+    \x0c\n\x05\x04\x08\x02\x04\x04\x12\x03G\x02\n\n\x0c\n\x05\x04\x08\x02\
+    \x04\x06\x12\x03G\x0b\x12\n\x0c\n\x05\x04\x08\x02\x04\x01\x12\x03G\x15\
+    \x1c\n\x0c\n\x05\x04\x08\x02\x04\x03\x12\x03G$%\n\x0b\n\x04\x04\x08\x02\
+    \x05\x12\x03H\x02&\n\x0c\n\x05\x04\x08\x02\x05\x04\x12\x03H\x02\n\n\x0c\
+    \n\x05\x04\x08\x02\x05\x06\x12\x03H\x0b\x14\n\x0c\n\x05\x04\x08\x02\x05\
+    \x01\x12\x03H\x15\x1e\n\x0c\n\x05\x04\x08\x02\x05\x03\x12\x03H$%\n\x0b\n\
+    \x04\x04\x08\x02\x06\x12\x03I\x02&\n\x0c\n\x05\x04\x08\x02\x06\x04\x12\
+    \x03I\x02\n\n\x0c\n\x05\x04\x08\x02\x06\x05\x12\x03I\x0b\x10\n\x0c\n\x05\
+    \x04\x08\x02\x06\x01\x12\x03I\x15!\n\x0c\n\x05\x04\x08\x02\x06\x03\x12\
+    \x03I$%\n\x0b\n\x04\x04\x08\x02\x07\x12\x03J\x02(\n\x0c\n\x05\x04\x08\
+    \x02\x07\x04\x12\x03J\x02\n\n\x0c\n\x05\x04\x08\x02\x07\x06\x12\x03J\x0b\
+    \x16\n\x0c\n\x05\x04\x08\x02\x07\x01\x12\x03J\x17#\n\x0c\n\x05\x04\x08\
+    \x02\x07\x03\x12\x03J&'\n\n\n\x02\x04\t\x12\x04M\0R\x01\n\n\n\x03\x04\t\
+    \x01\x12\x03M\x08\x14\n\x0b\n\x04\x04\t\x02\0\x12\x03N\x02!\n\x0c\n\x05\
+    \x04\t\x02\0\x04\x12\x03N\x02\n\n\x0c\n\x05\x04\t\x02\0\x05\x12\x03N\x0b\
+    \x11\n\x0c\n\x05\x04\t\x02\0\x01\x12\x03N\x16\x1a\n\x0c\n\x05\x04\t\x02\
+    \0\x03\x12\x03N\x1f\x20\n\x0b\n\x04\x04\t\x02\x01\x12\x03O\x02!\n\x0c\n\
+    \x05\x04\t\x02\x01\x04\x12\x03O\x02\n\n\x0c\n\x05\x04\t\x02\x01\x05\x12\
+    \x03O\x0b\x11\n\x0c\n\x05\x04\t\x02\x01\x01\x12\x03O\x16\x1a\n\x0c\n\x05\
+    \x04\t\x02\x01\x03\x12\x03O\x1f\x20\n\x0b\n\x04\x04\t\x02\x02\x12\x03P\
+    \x02!\n\x0c\n\x05\x04\t\x02\x02\x04\x12\x03P\x02\n\n\x0c\n\x05\x04\t\x02\
+    \x02\x06\x12\x03P\x0b\x15\n\x0c\n\x05\x04\t\x02\x02\x01\x12\x03P\x16\x1a\
+    \n\x0c\n\x05\x04\t\x02\x02\x03\x12\x03P\x1f\x20\n\x0b\n\x04\x04\t\x02\
+    \x03\x12\x03Q\x02!\n\x0c\n\x05\x04\t\x02\x03\x04\x12\x03Q\x02\n\n\x0c\n\
+    \x05\x04\t\x02\x03\x06\x12\x03Q\x0b\x11\n\x0c\n\x05\x04\t\x02\x03\x01\
+    \x12\x03Q\x16\x1c\n\x0c\n\x05\x04\t\x02\x03\x03\x12\x03Q\x1f\x20\n\n\n\
+    \x02\x04\n\x12\x04T\0X\x01\n\n\n\x03\x04\n\x01\x12\x03T\x08\x13\n\x0b\n\
+    \x04\x04\n\x02\0\x12\x03U\x02#\n\x0c\n\x05\x04\n\x02\0\x04\x12\x03U\x02\
+    \n\n\x0c\n\x05\x04\n\x02\0\x05\x12\x03U\x0b\x11\n\x0c\n\x05\x04\n\x02\0\
+    \x01\x12\x03U\x12\x1e\n\x0c\n\x05\x04\n\x02\0\x03\x12\x03U!\"\n\x0b\n\
+    \x04\x04\n\x02\x01\x12\x03V\x02!\n\x0c\n\x05\x04\n\x02\x01\x04\x12\x03V\
+    \x02\n\n\x0c\n\x05\x04\n\x02\x01\x05\x12\x03V\x0b\x11\n\x0c\n\x05\x04\n\
+    \x02\x01\x01\x12\x03V\x12\x1c\n\x0c\n\x05\x04\n\x02\x01\x03\x12\x03V\x1f\
+    \x20\n\x0b\n\x04\x04\n\x02\x02\x12\x03W\x02\x1e\n\x0c\n\x05\x04\n\x02\
+    \x02\x04\x12\x03W\x02\n\n\x0c\n\x05\x04\n\x02\x02\x06\x12\x03W\x0b\x12\n\
+    \x0c\n\x05\x04\n\x02\x02\x01\x12\x03W\x13\x19\n\x0c\n\x05\x04\n\x02\x02\
+    \x03\x12\x03W\x1c\x1d\n\n\n\x02\x04\x0b\x12\x04Z\0]\x01\n\n\n\x03\x04\
+    \x0b\x01\x12\x03Z\x08\x0f\n\x0b\n\x04\x04\x0b\x02\0\x12\x03[\x02\x1c\n\
+    \x0c\n\x05\x04\x0b\x02\0\x04\x12\x03[\x02\n\n\x0c\n\x05\x04\x0b\x02\0\
+    \x05\x12\x03[\x0b\x11\n\x0c\n\x05\x04\x0b\x02\0\x01\x12\x03[\x12\x17\n\
+    \x0c\n\x05\x04\x0b\x02\0\x03\x12\x03[\x1a\x1b\n\x0b\n\x04\x04\x0b\x02\
+    \x01\x12\x03\\\x02\x1c\n\x0c\n\x05\x04\x0b\x02\x01\x04\x12\x03\\\x02\n\n\
+    \x0c\n\x05\x04\x0b\x02\x01\x05\x12\x03\\\x0b\x11\n\x0c\n\x05\x04\x0b\x02\
+    \x01\x01\x12\x03\\\x12\x17\n\x0c\n\x05\x04\x0b\x02\x01\x03\x12\x03\\\x1a\
+    \x1b\
 ";
 
 static mut file_descriptor_proto_lazy: ::protobuf::lazy::Lazy<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::lazy::Lazy {
