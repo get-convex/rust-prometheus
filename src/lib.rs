@@ -230,3 +230,4 @@ pub use self::push::{
 };
 pub use self::registry::Registry;
 pub use self::registry::{default_registry, gather, register, unregister};
+pub use self::vmhistogram::{VMHistogram, VMHistogramVec};
