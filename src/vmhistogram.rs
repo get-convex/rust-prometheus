@@ -25,10 +25,13 @@
 use std::sync::Arc;
 
 use lazy_static::lazy_static;
-use parking_lot::Mutex;
+use parking_lot::RwLock;
 
 use crate::{
-    core::{Collector, Desc, Describer, Metric, MetricVec, MetricVecBuilder},
+    core::{
+        Atomic, AtomicF64, AtomicU64, Collector, Desc, Describer, Metric, MetricVec,
+        MetricVecBuilder,
+    },
     proto::{self, LabelPair},
     value::make_label_pairs,
     Opts,
@@ -59,10 +62,10 @@ lazy_static! {
 
 #[derive(Default)]
 struct Inner {
-    decimal_buckets: [Option<Box<[u64; BUCKETS_PER_DECIMAL]>>; DECIMAL_BUCKETS_COUNT],
-    lower: u64,
-    upper: u64,
-    sum: f64,
+    decimal_buckets: [[AtomicU64; BUCKETS_PER_DECIMAL]; DECIMAL_BUCKETS_COUNT],
+    lower: AtomicU64,
+    upper: AtomicU64,
+    sum: AtomicF64,
 }
 
 /// Histogram is a histogram for non-negative values with automatically created buckets.
@@ -95,7 +98,7 @@ struct Inner {
 #[allow(missing_debug_implementations)]
 #[derive(Clone)]
 pub struct VMHistogram {
-    inner: Arc<Mutex<Inner>>,
+    inner: Arc<RwLock<Inner>>,
     desc: Arc<Desc>,
     label_pairs: Arc<Vec<LabelPair>>,
 }
@@ -111,7 +114,7 @@ impl VMHistogram {
 
         let label_pairs = make_label_pairs(&desc, label_values)?;
         Ok(VMHistogram {
-            inner: Arc::new(Mutex::new(Inner::default())),
+            inner: Default::default(),
             desc: Arc::new(desc),
             label_pairs: Arc::new(label_pairs),
         })
@@ -124,12 +127,12 @@ impl VMHistogram {
             return;
         }
         let bucket_idx = (value.log10() - E_10_MIN as f64) * BUCKETS_PER_DECIMAL as f64;
-        let mut inner = self.inner.lock();
-        inner.sum += value;
+        let inner = self.inner.read();
+        inner.sum.inc_by(value);
         if bucket_idx.is_sign_negative() {
-            inner.lower += 1;
+            inner.lower.inc_by(1);
         } else if bucket_idx as usize >= BUCKETS_COUNT {
-            inner.upper += 1;
+            inner.upper.inc_by(1);
         } else {
             let mut idx = bucket_idx as usize;
             if idx as f64 == bucket_idx && idx > 0 {
@@ -139,8 +142,8 @@ impl VMHistogram {
             }
             let decimal_bucket_idx = idx / BUCKETS_PER_DECIMAL;
             let offset = idx % BUCKETS_PER_DECIMAL;
-            let bucket = &mut inner.decimal_buckets[decimal_bucket_idx];
-            bucket.get_or_insert_with(Default::default)[offset] += 1;
+            let bucket = &inner.decimal_buckets[decimal_bucket_idx];
+            bucket[offset].inc_by(1);
         }
     }
 
@@ -148,8 +151,7 @@ impl VMHistogram {
         let mut h = proto::VMHistogram::default();
         let mut count_total = 0;
 
-        let inner = self.inner.lock();
-        let sum_total = inner.sum;
+        let inner = self.inner.write();
         inner.visit_nonzero_buckets(|vmrange, count| {
             let mut range_proto = proto::VMRange::default();
             range_proto.set_range(vmrange.to_owned());
@@ -158,7 +160,7 @@ impl VMHistogram {
             count_total += count;
         });
         h.set_sample_count(count_total);
-        h.set_sample_sum(sum_total);
+        h.set_sample_sum(inner.sum.get());
         h
     }
 }
@@ -235,22 +237,20 @@ impl Inner {
     where
         F: FnMut(&str, u64),
     {
-        if self.lower > 0 {
-            visitor(&LOWER_BUCKET_RANGE, self.lower);
+        if self.lower.get() > 0 {
+            visitor(&LOWER_BUCKET_RANGE, self.lower.get());
         }
-        for (decimal_bucket_idx, bucket) in self.decimal_buckets.iter().enumerate() {
-            if let Some(buckets) = bucket {
-                for (offset, count) in buckets.iter().enumerate() {
-                    if *count > 0 {
-                        let bucket_idx = decimal_bucket_idx * BUCKETS_PER_DECIMAL + offset;
-                        let vmrange = BUCKET_RANGES[bucket_idx].as_str();
-                        visitor(vmrange, *count);
-                    }
+        for (decimal_bucket_idx, decimal_bucket) in self.decimal_buckets.iter().enumerate() {
+            for (offset, count) in decimal_bucket.iter().enumerate() {
+                if count.get() > 0 {
+                    let bucket_idx = decimal_bucket_idx * BUCKETS_PER_DECIMAL + offset;
+                    let vmrange = BUCKET_RANGES[bucket_idx].as_str();
+                    visitor(vmrange, count.get());
                 }
             }
         }
-        if self.upper > 0 {
-            visitor(&UPPER_BUCKET_RANGE, self.upper)
+        if self.upper.get() > 0 {
+            visitor(&UPPER_BUCKET_RANGE, self.upper.get())
         }
     }
 }
