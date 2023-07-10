@@ -121,7 +121,6 @@ This library supports four features:
 )]
 #![deny(missing_docs)]
 #![deny(missing_debug_implementations)]
-#![feature(once_cell)]
 
 /// Protocol buffers format of metrics.
 #[cfg(feature = "protobuf")]

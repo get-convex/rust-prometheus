@@ -22,11 +22,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-use std::{
-    mem::MaybeUninit,
-    sync::{Arc, LazyLock},
-};
+use std::sync::Arc;
 
+use lazy_static::lazy_static;
 use parking_lot::Mutex;
 
 use crate::{
@@ -41,34 +39,27 @@ const E_10_MAX: i32 = 18;
 const BUCKETS_PER_DECIMAL: usize = 18;
 const DECIMAL_BUCKETS_COUNT: usize = (E_10_MAX - E_10_MIN) as usize;
 const BUCKETS_COUNT: usize = DECIMAL_BUCKETS_COUNT * BUCKETS_PER_DECIMAL;
-static BUCKET_MULTIPLIER: LazyLock<f64> =
-    LazyLock::new(|| 10f64.powf(1.0f64 / BUCKETS_PER_DECIMAL as f64));
-static LOWER_BUCKET_RANGE: LazyLock<String> =
-    LazyLock::new(|| format!("0...{:.3e}", 10f64.powi(E_10_MIN)));
-static UPPER_BUCKET_RANGE: LazyLock<String> =
-    LazyLock::new(|| format!("{:.3e}...+Inf", 10f64.powi(E_10_MAX)));
-static BUCKET_RANGES: LazyLock<[String; BUCKETS_COUNT]> = LazyLock::new(|| {
-    // SAFETY: The `assume_init` is safe because the type we are claiming to
-    // have initialized here is a bunch of `MaybeUninit`s, which do not require
-    // initialization.
-    let mut ranges: [MaybeUninit<String>; BUCKETS_COUNT] =
-        unsafe { MaybeUninit::uninit().assume_init() };
-    let mut v = 10f64.powi(E_10_MIN as i32);
-    let mut start = format!("{:.3e}", v);
-    for elem in &mut ranges {
-        v = v * *BUCKET_MULTIPLIER;
-        let end = format!("{:.3e}", v);
-        elem.write(format!("{}...{}", start, end));
-        start = end;
-    }
-    // SAFETY: We've iterated over the full array and initialized every element with
-    // a `String`.
-    unsafe { std::mem::transmute(ranges) }
-});
+lazy_static! {
+    static ref BUCKET_MULTIPLIER: f64 = 10f64.powf(1.0f64 / BUCKETS_PER_DECIMAL as f64);
+    static ref LOWER_BUCKET_RANGE: String = format!("0...{:.3e}", 10f64.powi(E_10_MIN));
+    static ref UPPER_BUCKET_RANGE: String = format!("{:.3e}...+Inf", 10f64.powi(E_10_MAX));
+    static ref BUCKET_RANGES: Vec<String> = {
+        let mut ranges: Vec<String> = vec![String::new(); BUCKETS_COUNT];
+        let mut v = 10f64.powi(E_10_MIN);
+        let mut start = format!("{:.3e}", v);
+        for elem in &mut ranges {
+            v *= *BUCKET_MULTIPLIER;
+            let end = format!("{:.3e}", v);
+            *elem = format!("{}...{}", start, end);
+            start = end;
+        }
+        ranges
+    };
+}
 
 #[derive(Default)]
 struct Inner {
-    decimal_buckets: [Option<[u64; BUCKETS_PER_DECIMAL as usize]>; DECIMAL_BUCKETS_COUNT as usize],
+    decimal_buckets: [Option<Box<[u64; BUCKETS_PER_DECIMAL]>>; DECIMAL_BUCKETS_COUNT],
     lower: u64,
     upper: u64,
     sum: f64,
@@ -81,7 +72,7 @@ struct Inner {
 /// Each bucket contains a counter for values in the given range.
 /// Each non-empty bucket is exposed via the following metric:
 ///
-///	<metric_name>_bucket{<optional_tags>,vmrange="<start>...<end>"} <counter>
+/// <metric_name>_bucket{<optional_tags>,vmrange="<start>...<end>"} <counter>
 ///
 /// Where:
 ///
@@ -94,7 +85,7 @@ struct Inner {
 /// with `prometheus_buckets(<metric_name>_bucket)` function from PromQL extensions in VictoriaMetrics.
 /// (see https://github.com/VictoriaMetrics/VictoriaMetrics/wiki/MetricsQL ):
 ///
-///	prometheus_buckets(request_duration_bucket)
+/// prometheus_buckets(request_duration_bucket)
 ///
 /// Time series produced by the Histogram have better compression ratio comparing to
 /// Prometheus histogram buckets with `le` labels, since they don't include counters
@@ -144,7 +135,7 @@ impl VMHistogram {
             if idx as f64 == bucket_idx && idx > 0 {
                 // Edge case for 10^n values, which must go to the lower bucket
                 // according to Prometheus logic for `le`-based histograms.
-                idx = idx - 1;
+                idx -= 1;
             }
             let decimal_bucket_idx = idx / BUCKETS_PER_DECIMAL;
             let offset = idx % BUCKETS_PER_DECIMAL;
@@ -268,8 +259,7 @@ impl Inner {
 mod tests {
     use std::f64::EPSILON;
 
-    use crate::{Opts, VMHistogram, core::Collector, VMHistogramVec, Error};
-
+    use crate::{core::Collector, Error, Opts, VMHistogram, VMHistogramVec};
 
     #[test]
     fn test_vmhistogram() {
@@ -311,11 +301,7 @@ mod tests {
     #[test]
     fn test_error_on_inconsistent_label_cardinality() {
         let hist = VMHistogram::with_opts(
-            opts!(
-                "example_histogram",
-                "Used as an example",
-            )
-            .variable_label("example_variable"),
+            opts!("example_histogram", "Used as an example",).variable_label("example_variable"),
         );
 
         if let Err(Error::InconsistentCardinality { expect, got }) = hist {

@@ -65,13 +65,13 @@ message Bucket {
 }
 
 message Metric {
-  repeated LabelPair label        = 1;
-  optional Gauge     gauge        = 2;
-  optional Counter   counter      = 3;
-  optional Summary   summary      = 4;
-  optional Untyped   untyped      = 5;
-  optional Histogram histogram    = 7;
-  optional int64     timestamp_ms = 6;
+  repeated LabelPair   label        = 1;
+  optional Gauge       gauge        = 2;
+  optional Counter     counter      = 3;
+  optional Summary     summary      = 4;
+  optional Untyped     untyped      = 5;
+  optional Histogram   histogram    = 7;
+  optional int64       timestamp_ms = 6;
   optional VMHistogram vm_histogram = 8;
 }
 
