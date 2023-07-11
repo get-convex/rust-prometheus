@@ -1145,3 +1145,132 @@ fn test_register_histogram_vec_with_registry_trailing_comma() {
     );
     assert!(histogram_vec.is_ok());
 }
+
+/// Create a [`VMHistogram`][crate::VMHistogram] and registers to default registry.
+///
+/// # Examples
+///
+/// ```
+/// # use prometheus::{opts, register_vmhistogram};
+/// # fn main() {
+/// let opts = opts!("test_macro_histogram", "help");
+/// let res1 = register_vmhistogram!(opts);
+/// assert!(res1.is_ok());
+///
+/// let res2 = register_vmhistogram!("test_macro_histogram_2", "help");
+/// assert!(res2.is_ok());
+///
+/// # }
+/// ```
+#[macro_export(local_inner_macros)]
+macro_rules! register_vmhistogram {
+    ($NAME:expr, $HELP:expr $(,)?) => {
+        register_vmhistogram!(opts!($NAME, $HELP))
+    };
+    ($HOPTS:expr $(,)?) => {{
+        let histogram = $crate::VMHistogram::with_opts($HOPTS).unwrap();
+        $crate::register(Box::new(histogram.clone())).map(|_| histogram)
+    }};
+}
+
+/// Create a [`VMHistogramVec`][crate::VMHistogramVec] and registers to default registry.
+///
+/// # Examples
+///
+/// ```
+/// # use prometheus::{opts, register_vmhistogram_vec};
+/// # fn main() {
+/// let opts = opts!("test_macro_histogram_vec_1", "help");
+/// let histogram_vec = register_vmhistogram_vec!(opts, &["a", "b"]);
+/// assert!(histogram_vec.is_ok());
+///
+/// let histogram_vec =
+///     register_vmhistogram_vec!("test_macro_histogram_vec_2", "help", &["a", "b"]);
+/// assert!(histogram_vec.is_ok());
+///
+/// # }
+/// ```
+#[macro_export(local_inner_macros)]
+macro_rules! register_vmhistogram_vec {
+    ($HOPTS:expr, $LABELS_NAMES:expr $(,)?) => {{
+        let histogram_vec = $crate::VMHistogramVec::new($HOPTS, $LABELS_NAMES).unwrap();
+        $crate::register(Box::new(histogram_vec.clone())).map(|_| histogram_vec)
+    }};
+
+    ($NAME:expr, $HELP:expr, $LABELS_NAMES:expr $(,)?) => {{
+        register_vmhistogram_vec!(opts!($NAME, $HELP), $LABELS_NAMES)
+    }};
+}
+
+/// Create a [`VMHistogram`][crate::VMHistogram] and registers to a custom registry.
+///
+/// # Examples
+///
+/// ```
+/// # use prometheus::{register_vmhistogram_with_registry, opts};
+/// # use prometheus::Registry;
+/// # use std::collections::HashMap;
+/// # fn main() {
+/// let mut labels = HashMap::new();
+/// labels.insert("mykey".to_string(), "myvalue".to_string());
+/// let custom_registry = Registry::new_custom(Some("myprefix".to_string()), Some(labels)).unwrap();
+///
+/// let opts = opts!("test_macro_histogram", "help");
+/// let res1 = register_vmhistogram_with_registry!(opts, custom_registry);
+/// assert!(res1.is_ok());
+///
+/// let res2 = register_vmhistogram_with_registry!("test_macro_histogram_2", "help", custom_registry);
+/// assert!(res2.is_ok());
+///
+/// # }
+/// ```
+#[macro_export(local_inner_macros)]
+macro_rules! register_vmhistogram_with_registry {
+    ($NAME:expr, $HELP:expr, $REGISTRY:expr $(,)?) => {
+        register_vmhistogram_with_registry!(opts!($NAME, $HELP), $REGISTRY)
+    };
+
+    ($HOPTS:expr, $REGISTRY:expr $(,)?) => {{
+        let histogram = $crate::VMHistogram::with_opts($HOPTS).unwrap();
+        $REGISTRY
+            .register(Box::new(histogram.clone()))
+            .map(|_| histogram)
+    }};
+}
+
+/// Create a [`VMHistogramVec`][crate::VMHistogramVec] and registers to default registry.
+///
+/// # Examples
+///
+/// ```
+/// # use prometheus::{register_vmhistogram_vec_with_registry, opts};
+/// # use prometheus::Registry;
+/// # use std::collections::HashMap;
+/// # fn main() {
+/// let mut labels = HashMap::new();
+/// labels.insert("mykey".to_string(), "myvalue".to_string());
+/// let custom_registry = Registry::new_custom(Some("myprefix".to_string()), Some(labels)).unwrap();
+///
+/// let opts = opts!("test_macro_histogram_vec_1", "help");
+/// let histogram_vec = register_vmhistogram_vec_with_registry!(opts, &["a", "b"], custom_registry);
+/// assert!(histogram_vec.is_ok());
+///
+/// let histogram_vec =
+///     register_vmhistogram_vec_with_registry!("test_macro_histogram_vec_2", "help", &["a", "b"], custom_registry);
+/// assert!(histogram_vec.is_ok());
+///
+/// # }
+/// ```
+#[macro_export(local_inner_macros)]
+macro_rules! register_vmhistogram_vec_with_registry {
+    ($HOPTS:expr, $LABELS_NAMES:expr, $REGISTRY:expr $(,)?) => {{
+        let histogram_vec = $crate::VMHistogramVec::new($HOPTS, $LABELS_NAMES).unwrap();
+        $REGISTRY
+            .register(Box::new(histogram_vec.clone()))
+            .map(|_| histogram_vec)
+    }};
+
+    ($NAME:expr, $HELP:expr, $LABELS_NAMES:expr, $REGISTRY:expr $(,)?) => {{
+        register_vmhistogram_vec_with_registry!(opts!($NAME, $HELP), $LABELS_NAMES, $REGISTRY)
+    }};
+}

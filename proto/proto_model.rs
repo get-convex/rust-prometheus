@@ -1427,6 +1427,8 @@ pub struct Metric {
     pub histogram: ::protobuf::MessageField<Histogram>,
     // @@protoc_insertion_point(field:io.prometheus.client.Metric.timestamp_ms)
     pub timestamp_ms: ::std::option::Option<i64>,
+    // @@protoc_insertion_point(field:io.prometheus.client.Metric.vm_histogram)
+    pub vm_histogram: ::protobuf::MessageField<VMHistogram>,
     // special fields
     // @@protoc_insertion_point(special_field:io.prometheus.client.Metric.special_fields)
     pub special_fields: ::protobuf::SpecialFields,
@@ -1463,7 +1465,7 @@ impl Metric {
     }
 
     fn generated_message_descriptor_data() -> ::protobuf::reflect::GeneratedMessageDescriptorData {
-        let mut fields = ::std::vec::Vec::with_capacity(7);
+        let mut fields = ::std::vec::Vec::with_capacity(8);
         let mut oneofs = ::std::vec::Vec::with_capacity(0);
         fields.push(::protobuf::reflect::rt::v2::make_vec_simpler_accessor::<_, _>(
             "label",
@@ -1499,6 +1501,11 @@ impl Metric {
             "timestamp_ms",
             |m: &Metric| { &m.timestamp_ms },
             |m: &mut Metric| { &mut m.timestamp_ms },
+        ));
+        fields.push(::protobuf::reflect::rt::v2::make_message_field_accessor::<_, VMHistogram>(
+            "vm_histogram",
+            |m: &Metric| { &m.vm_histogram },
+            |m: &mut Metric| { &mut m.vm_histogram },
         ));
         ::protobuf::reflect::GeneratedMessageDescriptorData::new_2::<Metric>(
             "Metric",
@@ -1539,6 +1546,9 @@ impl ::protobuf::Message for Metric {
                 48 => {
                     self.timestamp_ms = ::std::option::Option::Some(is.read_int64()?);
                 },
+                66 => {
+                    ::protobuf::rt::read_singular_message_into_field(is, &mut self.vm_histogram)?;
+                },
                 tag => {
                     ::protobuf::rt::read_unknown_or_skip_group(tag, is, self.special_fields.mut_unknown_fields())?;
                 },
@@ -1578,6 +1588,10 @@ impl ::protobuf::Message for Metric {
         if let Some(v) = self.timestamp_ms {
             my_size += ::protobuf::rt::int64_size(6, v);
         }
+        if let Some(v) = self.vm_histogram.as_ref() {
+            let len = v.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint64_size(len) + len;
+        }
         my_size += ::protobuf::rt::unknown_fields_size(self.special_fields.unknown_fields());
         self.special_fields.cached_size().set(my_size as u32);
         my_size
@@ -1605,6 +1619,9 @@ impl ::protobuf::Message for Metric {
         if let Some(v) = self.timestamp_ms {
             os.write_int64(6, v)?;
         }
+        if let Some(v) = self.vm_histogram.as_ref() {
+            ::protobuf::rt::write_message_field_with_cached_size(8, v, os)?;
+        }
         os.write_unknown_fields(self.special_fields.unknown_fields())?;
         ::std::result::Result::Ok(())
     }
@@ -1629,6 +1646,7 @@ impl ::protobuf::Message for Metric {
         self.untyped.clear();
         self.histogram.clear();
         self.timestamp_ms = ::std::option::Option::None;
+        self.vm_histogram.clear();
         self.special_fields.clear();
     }
 
@@ -1641,6 +1659,7 @@ impl ::protobuf::Message for Metric {
             untyped: ::protobuf::MessageField::none(),
             histogram: ::protobuf::MessageField::none(),
             timestamp_ms: ::std::option::Option::None,
+            vm_histogram: ::protobuf::MessageField::none(),
             special_fields: ::protobuf::SpecialFields::new(),
         };
         &instance
@@ -1935,6 +1954,398 @@ impl ::protobuf::reflect::ProtobufValue for MetricFamily {
     type RuntimeType = ::protobuf::reflect::rt::RuntimeTypeMessage<Self>;
 }
 
+// @@protoc_insertion_point(message:io.prometheus.client.VMHistogram)
+#[derive(PartialEq,Clone,Default,Debug)]
+pub struct VMHistogram {
+    // message fields
+    // @@protoc_insertion_point(field:io.prometheus.client.VMHistogram.sample_count)
+    pub sample_count: ::std::option::Option<u64>,
+    // @@protoc_insertion_point(field:io.prometheus.client.VMHistogram.sample_sum)
+    pub sample_sum: ::std::option::Option<f64>,
+    // @@protoc_insertion_point(field:io.prometheus.client.VMHistogram.ranges)
+    pub ranges: ::std::vec::Vec<VMRange>,
+    // special fields
+    // @@protoc_insertion_point(special_field:io.prometheus.client.VMHistogram.special_fields)
+    pub special_fields: ::protobuf::SpecialFields,
+}
+
+impl<'a> ::std::default::Default for &'a VMHistogram {
+    fn default() -> &'a VMHistogram {
+        <VMHistogram as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl VMHistogram {
+    pub fn new() -> VMHistogram {
+        ::std::default::Default::default()
+    }
+
+    // optional uint64 sample_count = 1;
+
+    pub fn sample_count(&self) -> u64 {
+        self.sample_count.unwrap_or(0)
+    }
+
+    pub fn clear_sample_count(&mut self) {
+        self.sample_count = ::std::option::Option::None;
+    }
+
+    pub fn has_sample_count(&self) -> bool {
+        self.sample_count.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_sample_count(&mut self, v: u64) {
+        self.sample_count = ::std::option::Option::Some(v);
+    }
+
+    // optional double sample_sum = 2;
+
+    pub fn sample_sum(&self) -> f64 {
+        self.sample_sum.unwrap_or(0.)
+    }
+
+    pub fn clear_sample_sum(&mut self) {
+        self.sample_sum = ::std::option::Option::None;
+    }
+
+    pub fn has_sample_sum(&self) -> bool {
+        self.sample_sum.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_sample_sum(&mut self, v: f64) {
+        self.sample_sum = ::std::option::Option::Some(v);
+    }
+
+    fn generated_message_descriptor_data() -> ::protobuf::reflect::GeneratedMessageDescriptorData {
+        let mut fields = ::std::vec::Vec::with_capacity(3);
+        let mut oneofs = ::std::vec::Vec::with_capacity(0);
+        fields.push(::protobuf::reflect::rt::v2::make_option_accessor::<_, _>(
+            "sample_count",
+            |m: &VMHistogram| { &m.sample_count },
+            |m: &mut VMHistogram| { &mut m.sample_count },
+        ));
+        fields.push(::protobuf::reflect::rt::v2::make_option_accessor::<_, _>(
+            "sample_sum",
+            |m: &VMHistogram| { &m.sample_sum },
+            |m: &mut VMHistogram| { &mut m.sample_sum },
+        ));
+        fields.push(::protobuf::reflect::rt::v2::make_vec_simpler_accessor::<_, _>(
+            "ranges",
+            |m: &VMHistogram| { &m.ranges },
+            |m: &mut VMHistogram| { &mut m.ranges },
+        ));
+        ::protobuf::reflect::GeneratedMessageDescriptorData::new_2::<VMHistogram>(
+            "VMHistogram",
+            fields,
+            oneofs,
+        )
+    }
+}
+
+impl ::protobuf::Message for VMHistogram {
+    const NAME: &'static str = "VMHistogram";
+
+    fn is_initialized(&self) -> bool {
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream<'_>) -> ::protobuf::Result<()> {
+        while let Some(tag) = is.read_raw_tag_or_eof()? {
+            match tag {
+                8 => {
+                    self.sample_count = ::std::option::Option::Some(is.read_uint64()?);
+                },
+                17 => {
+                    self.sample_sum = ::std::option::Option::Some(is.read_double()?);
+                },
+                26 => {
+                    self.ranges.push(is.read_message()?);
+                },
+                tag => {
+                    ::protobuf::rt::read_unknown_or_skip_group(tag, is, self.special_fields.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u64 {
+        let mut my_size = 0;
+        if let Some(v) = self.sample_count {
+            my_size += ::protobuf::rt::uint64_size(1, v);
+        }
+        if let Some(v) = self.sample_sum {
+            my_size += 1 + 8;
+        }
+        for value in &self.ranges {
+            let len = value.compute_size();
+            my_size += 1 + ::protobuf::rt::compute_raw_varint64_size(len) + len;
+        };
+        my_size += ::protobuf::rt::unknown_fields_size(self.special_fields.unknown_fields());
+        self.special_fields.cached_size().set(my_size as u32);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::Result<()> {
+        if let Some(v) = self.sample_count {
+            os.write_uint64(1, v)?;
+        }
+        if let Some(v) = self.sample_sum {
+            os.write_double(2, v)?;
+        }
+        for v in &self.ranges {
+            ::protobuf::rt::write_message_field_with_cached_size(3, v, os)?;
+        };
+        os.write_unknown_fields(self.special_fields.unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn special_fields(&self) -> &::protobuf::SpecialFields {
+        &self.special_fields
+    }
+
+    fn mut_special_fields(&mut self) -> &mut ::protobuf::SpecialFields {
+        &mut self.special_fields
+    }
+
+    fn new() -> VMHistogram {
+        VMHistogram::new()
+    }
+
+    fn clear(&mut self) {
+        self.sample_count = ::std::option::Option::None;
+        self.sample_sum = ::std::option::Option::None;
+        self.ranges.clear();
+        self.special_fields.clear();
+    }
+
+    fn default_instance() -> &'static VMHistogram {
+        static instance: VMHistogram = VMHistogram {
+            sample_count: ::std::option::Option::None,
+            sample_sum: ::std::option::Option::None,
+            ranges: ::std::vec::Vec::new(),
+            special_fields: ::protobuf::SpecialFields::new(),
+        };
+        &instance
+    }
+}
+
+impl ::protobuf::MessageFull for VMHistogram {
+    fn descriptor() -> ::protobuf::reflect::MessageDescriptor {
+        static descriptor: ::protobuf::rt::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::rt::Lazy::new();
+        descriptor.get(|| file_descriptor().message_by_package_relative_name("VMHistogram").unwrap()).clone()
+    }
+}
+
+impl ::std::fmt::Display for VMHistogram {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for VMHistogram {
+    type RuntimeType = ::protobuf::reflect::rt::RuntimeTypeMessage<Self>;
+}
+
+// @@protoc_insertion_point(message:io.prometheus.client.VMRange)
+#[derive(PartialEq,Clone,Default,Debug)]
+pub struct VMRange {
+    // message fields
+    // @@protoc_insertion_point(field:io.prometheus.client.VMRange.range)
+    pub range: ::std::option::Option<::std::string::String>,
+    // @@protoc_insertion_point(field:io.prometheus.client.VMRange.count)
+    pub count: ::std::option::Option<u64>,
+    // special fields
+    // @@protoc_insertion_point(special_field:io.prometheus.client.VMRange.special_fields)
+    pub special_fields: ::protobuf::SpecialFields,
+}
+
+impl<'a> ::std::default::Default for &'a VMRange {
+    fn default() -> &'a VMRange {
+        <VMRange as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl VMRange {
+    pub fn new() -> VMRange {
+        ::std::default::Default::default()
+    }
+
+    // optional string range = 1;
+
+    pub fn range(&self) -> &str {
+        match self.range.as_ref() {
+            Some(v) => v,
+            None => "",
+        }
+    }
+
+    pub fn clear_range(&mut self) {
+        self.range = ::std::option::Option::None;
+    }
+
+    pub fn has_range(&self) -> bool {
+        self.range.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_range(&mut self, v: ::std::string::String) {
+        self.range = ::std::option::Option::Some(v);
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_range(&mut self) -> &mut ::std::string::String {
+        if self.range.is_none() {
+            self.range = ::std::option::Option::Some(::std::string::String::new());
+        }
+        self.range.as_mut().unwrap()
+    }
+
+    // Take field
+    pub fn take_range(&mut self) -> ::std::string::String {
+        self.range.take().unwrap_or_else(|| ::std::string::String::new())
+    }
+
+    // optional uint64 count = 2;
+
+    pub fn count(&self) -> u64 {
+        self.count.unwrap_or(0)
+    }
+
+    pub fn clear_count(&mut self) {
+        self.count = ::std::option::Option::None;
+    }
+
+    pub fn has_count(&self) -> bool {
+        self.count.is_some()
+    }
+
+    // Param is passed by value, moved
+    pub fn set_count(&mut self, v: u64) {
+        self.count = ::std::option::Option::Some(v);
+    }
+
+    fn generated_message_descriptor_data() -> ::protobuf::reflect::GeneratedMessageDescriptorData {
+        let mut fields = ::std::vec::Vec::with_capacity(2);
+        let mut oneofs = ::std::vec::Vec::with_capacity(0);
+        fields.push(::protobuf::reflect::rt::v2::make_option_accessor::<_, _>(
+            "range",
+            |m: &VMRange| { &m.range },
+            |m: &mut VMRange| { &mut m.range },
+        ));
+        fields.push(::protobuf::reflect::rt::v2::make_option_accessor::<_, _>(
+            "count",
+            |m: &VMRange| { &m.count },
+            |m: &mut VMRange| { &mut m.count },
+        ));
+        ::protobuf::reflect::GeneratedMessageDescriptorData::new_2::<VMRange>(
+            "VMRange",
+            fields,
+            oneofs,
+        )
+    }
+}
+
+impl ::protobuf::Message for VMRange {
+    const NAME: &'static str = "VMRange";
+
+    fn is_initialized(&self) -> bool {
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream<'_>) -> ::protobuf::Result<()> {
+        while let Some(tag) = is.read_raw_tag_or_eof()? {
+            match tag {
+                10 => {
+                    self.range = ::std::option::Option::Some(is.read_string()?);
+                },
+                16 => {
+                    self.count = ::std::option::Option::Some(is.read_uint64()?);
+                },
+                tag => {
+                    ::protobuf::rt::read_unknown_or_skip_group(tag, is, self.special_fields.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u64 {
+        let mut my_size = 0;
+        if let Some(v) = self.range.as_ref() {
+            my_size += ::protobuf::rt::string_size(1, &v);
+        }
+        if let Some(v) = self.count {
+            my_size += ::protobuf::rt::uint64_size(2, v);
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.special_fields.unknown_fields());
+        self.special_fields.cached_size().set(my_size as u32);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::Result<()> {
+        if let Some(v) = self.range.as_ref() {
+            os.write_string(1, v)?;
+        }
+        if let Some(v) = self.count {
+            os.write_uint64(2, v)?;
+        }
+        os.write_unknown_fields(self.special_fields.unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn special_fields(&self) -> &::protobuf::SpecialFields {
+        &self.special_fields
+    }
+
+    fn mut_special_fields(&mut self) -> &mut ::protobuf::SpecialFields {
+        &mut self.special_fields
+    }
+
+    fn new() -> VMRange {
+        VMRange::new()
+    }
+
+    fn clear(&mut self) {
+        self.range = ::std::option::Option::None;
+        self.count = ::std::option::Option::None;
+        self.special_fields.clear();
+    }
+
+    fn default_instance() -> &'static VMRange {
+        static instance: VMRange = VMRange {
+            range: ::std::option::Option::None,
+            count: ::std::option::Option::None,
+            special_fields: ::protobuf::SpecialFields::new(),
+        };
+        &instance
+    }
+}
+
+impl ::protobuf::MessageFull for VMRange {
+    fn descriptor() -> ::protobuf::reflect::MessageDescriptor {
+        static descriptor: ::protobuf::rt::Lazy<::protobuf::reflect::MessageDescriptor> = ::protobuf::rt::Lazy::new();
+        descriptor.get(|| file_descriptor().message_by_package_relative_name("VMRange").unwrap()).clone()
+    }
+}
+
+impl ::std::fmt::Display for VMRange {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for VMRange {
+    type RuntimeType = ::protobuf::reflect::rt::RuntimeTypeMessage<Self>;
+}
+
 #[derive(Clone,Copy,PartialEq,Eq,Debug,Hash)]
 // @@protoc_insertion_point(enum:io.prometheus.client.MetricType)
 pub enum MetricType {
@@ -1948,6 +2359,8 @@ pub enum MetricType {
     UNTYPED = 3,
     // @@protoc_insertion_point(enum_value:io.prometheus.client.MetricType.HISTOGRAM)
     HISTOGRAM = 4,
+    // @@protoc_insertion_point(enum_value:io.prometheus.client.MetricType.VMHISTOGRAM)
+    VMHISTOGRAM = 5,
 }
 
 impl ::protobuf::Enum for MetricType {
@@ -1964,6 +2377,7 @@ impl ::protobuf::Enum for MetricType {
             2 => ::std::option::Option::Some(MetricType::SUMMARY),
             3 => ::std::option::Option::Some(MetricType::UNTYPED),
             4 => ::std::option::Option::Some(MetricType::HISTOGRAM),
+            5 => ::std::option::Option::Some(MetricType::VMHISTOGRAM),
             _ => ::std::option::Option::None
         }
     }
@@ -1975,6 +2389,7 @@ impl ::protobuf::Enum for MetricType {
             "SUMMARY" => ::std::option::Option::Some(MetricType::SUMMARY),
             "UNTYPED" => ::std::option::Option::Some(MetricType::UNTYPED),
             "HISTOGRAM" => ::std::option::Option::Some(MetricType::HISTOGRAM),
+            "VMHISTOGRAM" => ::std::option::Option::Some(MetricType::VMHISTOGRAM),
             _ => ::std::option::Option::None
         }
     }
@@ -1985,6 +2400,7 @@ impl ::protobuf::Enum for MetricType {
         MetricType::SUMMARY,
         MetricType::UNTYPED,
         MetricType::HISTOGRAM,
+        MetricType::VMHISTOGRAM,
     ];
 }
 
@@ -2028,7 +2444,7 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     Sum\x124\n\x06bucket\x18\x03\x20\x03(\x0b2\x1c.io.prometheus.client.Buck\
     etR\x06bucket\"T\n\x06Bucket\x12)\n\x10cumulative_count\x18\x01\x20\x01(\
     \x04R\x0fcumulativeCount\x12\x1f\n\x0bupper_bound\x18\x02\x20\x01(\x01R\
-    \nupperBound\"\xff\x02\n\x06Metric\x125\n\x05label\x18\x01\x20\x03(\x0b2\
+    \nupperBound\"\xc5\x03\n\x06Metric\x125\n\x05label\x18\x01\x20\x03(\x0b2\
     \x1f.io.prometheus.client.LabelPairR\x05label\x121\n\x05gauge\x18\x02\
     \x20\x01(\x0b2\x1b.io.prometheus.client.GaugeR\x05gauge\x127\n\x07counte\
     r\x18\x03\x20\x01(\x0b2\x1d.io.prometheus.client.CounterR\x07counter\x12\
@@ -2036,13 +2452,20 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x07summary\x127\n\x07untyped\x18\x05\x20\x01(\x0b2\x1d.io.prometheus.cl\
     ient.UntypedR\x07untyped\x12=\n\thistogram\x18\x07\x20\x01(\x0b2\x1f.io.\
     prometheus.client.HistogramR\thistogram\x12!\n\x0ctimestamp_ms\x18\x06\
-    \x20\x01(\x03R\x0btimestampMs\"\xa2\x01\n\x0cMetricFamily\x12\x12\n\x04n\
-    ame\x18\x01\x20\x01(\tR\x04name\x12\x12\n\x04help\x18\x02\x20\x01(\tR\
-    \x04help\x124\n\x04type\x18\x03\x20\x01(\x0e2\x20.io.prometheus.client.M\
-    etricTypeR\x04type\x124\n\x06metric\x18\x04\x20\x03(\x0b2\x1c.io.prometh\
-    eus.client.MetricR\x06metric*M\n\nMetricType\x12\x0b\n\x07COUNTER\x10\0\
-    \x12\t\n\x05GAUGE\x10\x01\x12\x0b\n\x07SUMMARY\x10\x02\x12\x0b\n\x07UNTY\
-    PED\x10\x03\x12\r\n\tHISTOGRAM\x10\x04B\x16\n\x14io.prometheus.client\
+    \x20\x01(\x03R\x0btimestampMs\x12D\n\x0cvm_histogram\x18\x08\x20\x01(\
+    \x0b2!.io.prometheus.client.VMHistogramR\x0bvmHistogram\"\xa2\x01\n\x0cM\
+    etricFamily\x12\x12\n\x04name\x18\x01\x20\x01(\tR\x04name\x12\x12\n\x04h\
+    elp\x18\x02\x20\x01(\tR\x04help\x124\n\x04type\x18\x03\x20\x01(\x0e2\x20\
+    .io.prometheus.client.MetricTypeR\x04type\x124\n\x06metric\x18\x04\x20\
+    \x03(\x0b2\x1c.io.prometheus.client.MetricR\x06metric\"\x86\x01\n\x0bVMH\
+    istogram\x12!\n\x0csample_count\x18\x01\x20\x01(\x04R\x0bsampleCount\x12\
+    \x1d\n\nsample_sum\x18\x02\x20\x01(\x01R\tsampleSum\x125\n\x06ranges\x18\
+    \x03\x20\x03(\x0b2\x1d.io.prometheus.client.VMRangeR\x06ranges\"5\n\x07V\
+    MRange\x12\x14\n\x05range\x18\x01\x20\x01(\tR\x05range\x12\x14\n\x05coun\
+    t\x18\x02\x20\x01(\x04R\x05count*^\n\nMetricType\x12\x0b\n\x07COUNTER\
+    \x10\0\x12\t\n\x05GAUGE\x10\x01\x12\x0b\n\x07SUMMARY\x10\x02\x12\x0b\n\
+    \x07UNTYPED\x10\x03\x12\r\n\tHISTOGRAM\x10\x04\x12\x0f\n\x0bVMHISTOGRAM\
+    \x10\x05B\x16\n\x14io.prometheus.client\
 ";
 
 /// `FileDescriptorProto` object which was a source for this generated file
@@ -2060,7 +2483,7 @@ pub fn file_descriptor() -> &'static ::protobuf::reflect::FileDescriptor {
     file_descriptor.get(|| {
         let generated_file_descriptor = generated_file_descriptor_lazy.get(|| {
             let mut deps = ::std::vec::Vec::with_capacity(0);
-            let mut messages = ::std::vec::Vec::with_capacity(10);
+            let mut messages = ::std::vec::Vec::with_capacity(12);
             messages.push(LabelPair::generated_message_descriptor_data());
             messages.push(Gauge::generated_message_descriptor_data());
             messages.push(Counter::generated_message_descriptor_data());
@@ -2071,6 +2494,8 @@ pub fn file_descriptor() -> &'static ::protobuf::reflect::FileDescriptor {
             messages.push(Bucket::generated_message_descriptor_data());
             messages.push(Metric::generated_message_descriptor_data());
             messages.push(MetricFamily::generated_message_descriptor_data());
+            messages.push(VMHistogram::generated_message_descriptor_data());
+            messages.push(VMRange::generated_message_descriptor_data());
             let mut enums = ::std::vec::Vec::with_capacity(1);
             enums.push(MetricType::generated_enum_descriptor_data());
             ::protobuf::reflect::GeneratedFileDescriptor::new_generated(

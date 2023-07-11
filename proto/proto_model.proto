@@ -27,6 +27,7 @@ enum MetricType {
   SUMMARY    = 2;
   UNTYPED    = 3;
   HISTOGRAM  = 4;
+  VMHISTOGRAM = 5;
 }
 
 message Gauge {
@@ -64,13 +65,14 @@ message Bucket {
 }
 
 message Metric {
-  repeated LabelPair label        = 1;
-  optional Gauge     gauge        = 2;
-  optional Counter   counter      = 3;
-  optional Summary   summary      = 4;
-  optional Untyped   untyped      = 5;
-  optional Histogram histogram    = 7;
-  optional int64     timestamp_ms = 6;
+  repeated LabelPair   label        = 1;
+  optional Gauge       gauge        = 2;
+  optional Counter     counter      = 3;
+  optional Summary     summary      = 4;
+  optional Untyped     untyped      = 5;
+  optional Histogram   histogram    = 7;
+  optional int64       timestamp_ms = 6;
+  optional VMHistogram vm_histogram = 8;
 }
 
 message MetricFamily {
@@ -78,4 +80,15 @@ message MetricFamily {
   optional string     help   = 2;
   optional MetricType type   = 3;
   repeated Metric     metric = 4;
+}
+
+message VMHistogram {
+  optional uint64 sample_count = 1;
+  optional double sample_sum = 2;
+  repeated VMRange ranges = 3;
+}
+
+message VMRange {
+  optional string range = 1;
+  optional uint64 count = 2;
 }

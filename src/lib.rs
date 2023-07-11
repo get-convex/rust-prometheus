@@ -154,6 +154,7 @@ mod push;
 mod registry;
 mod value;
 mod vec;
+mod vmhistogram;
 
 // Public for generated code.
 #[doc(hidden)]
@@ -218,3 +219,4 @@ pub use self::push::{
 };
 pub use self::registry::Registry;
 pub use self::registry::{default_registry, gather, register, unregister};
+pub use self::vmhistogram::{VMHistogram, VMHistogramVec};

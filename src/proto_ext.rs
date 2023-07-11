@@ -2,7 +2,7 @@ use protobuf::{EnumOrUnknown, MessageField};
 
 use crate::proto::{
     Bucket, Counter, Gauge, Histogram, LabelPair, Metric, MetricFamily, MetricType, Quantile,
-    Summary,
+    Summary, VMHistogram,
 };
 
 impl Metric {
@@ -81,6 +81,16 @@ impl Metric {
     /// Sets the histogram of this metric to the specified histogram.
     pub fn set_histogram(&mut self, histogram: Histogram) {
         self.histogram = histogram.into();
+    }
+
+    /// Returns the VMHistogram of this metric.
+    pub fn get_vm_histogram(&self) -> &MessageField<VMHistogram> {
+        &self.vm_histogram
+    }
+
+    /// Sets the VMHistogram of this metric to the specified VMHistogram.
+    pub fn set_vm_histogram(&mut self, histogram: VMHistogram) {
+        self.vm_histogram = histogram.into();
     }
 }
 
@@ -252,6 +262,12 @@ impl From<Histogram> for MessageField<Histogram> {
     }
 }
 
+impl From<VMHistogram> for MessageField<VMHistogram> {
+    fn from(value: VMHistogram) -> Self {
+        MessageField::some(value)
+    }
+}
+
 impl From<Summary> for MessageField<Summary> {
     fn from(value: Summary) -> Self {
         MessageField::some(value)
@@ -263,3 +279,4 @@ impl From<MetricType> for Option<EnumOrUnknown<MetricType>> {
         Some(EnumOrUnknown::from(value))
     }
 }
+

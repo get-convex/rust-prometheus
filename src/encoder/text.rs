@@ -4,7 +4,7 @@ use std::borrow::Cow;
 use std::io::{self, Write};
 
 use crate::errors::Result;
-use crate::histogram::BUCKET_LABEL;
+use crate::histogram::{BUCKET_LABEL, VMRANGE_LABEL};
 use crate::proto::{self, MetricFamily, MetricType};
 #[cfg(feature = "protobuf")]
 use crate::proto_ext::MessageFieldExt;
@@ -83,6 +83,28 @@ impl TextEncoder {
                     }
                     MetricType::GAUGE => {
                         write_sample(writer, name, None, m, None, m.get_gauge().get_value())?;
+                    }
+                    MetricType::VMHISTOGRAM => {
+                        let h = m.get_vm_histogram();
+                        for range in &h.ranges {
+                            write_sample(
+                                writer,
+                                name,
+                                Some("_bucket"),
+                                m,
+                                Some((VMRANGE_LABEL, range.range())),
+                                range.count() as f64,
+                            )?;
+                        }
+                        write_sample(writer, name, Some("_sum"), m, None, h.sample_sum())?;
+                        write_sample(
+                            writer,
+                            name,
+                            Some("_count"),
+                            m,
+                            None,
+                            h.sample_count() as f64,
+                        )?;
                     }
                     MetricType::HISTOGRAM => {
                         let h = m.get_histogram();

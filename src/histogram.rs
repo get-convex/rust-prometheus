@@ -29,6 +29,7 @@ pub const DEFAULT_BUCKETS: &[f64; 11] = &[
 /// Used for the label that defines the upper bound of a
 /// bucket of a histogram ("le" -> "less or equal").
 pub const BUCKET_LABEL: &str = "le";
+pub const VMRANGE_LABEL: &str = "vmrange";
 
 #[inline]
 fn check_bucket_label(label: &str) -> Result<()> {
