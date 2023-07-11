@@ -152,13 +152,13 @@ impl VMHistogram {
         let mut count_total = 0;
 
         let inner = self.inner.write();
-        inner.visit_nonzero_buckets(|vmrange, count| {
+        for (vmrange, count) in inner.buckets() {
             let mut range_proto = proto::VMRange::default();
             range_proto.set_range(vmrange.to_owned());
             range_proto.set_count(count);
             h.mut_ranges().push(range_proto);
             count_total += count;
-        });
+        }
         h.set_sample_count(count_total);
         h.set_sample_sum(inner.sum.get());
         h
@@ -227,31 +227,39 @@ impl VMHistogramVec {
 }
 
 impl Inner {
-    /// `visit_nonzero_buckets` calls `visitor` for all buckets with non-zero counters.
-    ///
+    /// Returns a iterator of `(vmrange, count)`.
     /// vmrange contains "<start>...<end>" string with bucket bounds. The lower bound
     /// isn't included in the bucket, while the upper bound is included.
     /// This is required to be compatible with Prometheus-style histogram buckets
     /// with `le` (less or equal) labels.
-    fn visit_nonzero_buckets<F>(&self, mut visitor: F)
-    where
-        F: FnMut(&str, u64),
-    {
-        if self.lower.get() > 0 {
-            visitor(&LOWER_BUCKET_RANGE, self.lower.get());
-        }
-        for (decimal_bucket_idx, decimal_bucket) in self.decimal_buckets.iter().enumerate() {
-            for (offset, count) in decimal_bucket.iter().enumerate() {
-                if count.get() > 0 {
-                    let bucket_idx = decimal_bucket_idx * BUCKETS_PER_DECIMAL + offset;
-                    let vmrange = BUCKET_RANGES[bucket_idx].as_str();
-                    visitor(vmrange, count.get());
-                }
-            }
-        }
-        if self.upper.get() > 0 {
-            visitor(&UPPER_BUCKET_RANGE, self.upper.get())
-        }
+    fn buckets(&self) -> impl Iterator<Item = (&str, u64)> {
+        let lower = self.lower.get();
+        let lower_iter = (lower > 0)
+            .then(|| (LOWER_BUCKET_RANGE.as_str(), lower))
+            .into_iter();
+        let buckets_iter = self
+            .decimal_buckets
+            .iter()
+            .enumerate()
+            .map(|(decimal_bucket_idx, decimal_bucket)| {
+                decimal_bucket
+                    .iter()
+                    .enumerate()
+                    .map(move |(offset, count)| {
+                        let bucket_idx = decimal_bucket_idx * BUCKETS_PER_DECIMAL + offset;
+                        let vmrange = BUCKET_RANGES[bucket_idx].as_str();
+                        (count.get() > 0)
+                            .then(|| (vmrange, count.get()))
+                            .into_iter()
+                    })
+                    .flatten()
+            })
+            .flatten();
+        let upper = self.upper.get();
+        let upper_iter = (upper > 0)
+            .then(|| (UPPER_BUCKET_RANGE.as_str(), upper))
+            .into_iter();
+        lower_iter.chain(buckets_iter).chain(upper_iter)
     }
 }
 
