@@ -123,13 +123,13 @@ impl VMHistogram {
     /// Add a single observation to the [`VMHistogram`]
     /// Negative values and NaNs are ignored.
     pub fn observe(&self, value: f64) {
-        if value.is_nan() || value.is_sign_negative() {
+        if value.is_nan() || value < 0 {
             return;
         }
         let bucket_idx = (value.log10() - E_10_MIN as f64) * BUCKETS_PER_DECIMAL as f64;
         let inner = self.inner.read();
         inner.sum.inc_by(value);
-        if bucket_idx.is_sign_negative() {
+        if bucket_idx < 0 {
             inner.lower.inc_by(1);
         } else if bucket_idx as usize >= BUCKETS_COUNT {
             inner.upper.inc_by(1);
