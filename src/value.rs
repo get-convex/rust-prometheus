@@ -59,7 +59,7 @@ impl<P: Atomic> Value<P> {
             val: P::new(val),
             val_type,
             label_pairs,
-            last_observed_ms: StdAtomicU64::new(0),
+            last_observed_ms: StdAtomicU64::new(timer::now_millis()),
         })
     }
 

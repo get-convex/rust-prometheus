@@ -38,8 +38,9 @@ pub trait Metric: Sync + Send + Clone {
 /// milliseconds since a fixed per-process anchor (process start).
 pub trait LastObserved {
     /// Returns the millisecond timestamp of the most recent write to
-    /// this metric, on the [`crate::timer::now_millis`] clock. Returns
-    /// `0` if the metric has never been written to.
+    /// this metric, on the [`crate::timer::now_millis`] clock.
+    /// Initialized to the creation time so a newly-created (but
+    /// not-yet-written) child is not immediately swept.
     fn last_observed_ms(&self) -> u64;
 }
 

@@ -128,7 +128,7 @@ impl VMHistogram {
             inner: Default::default(),
             desc: Arc::new(desc),
             label_pairs: Arc::new(label_pairs),
-            last_observed_ms: Arc::new(StdAtomicU64::new(0)),
+            last_observed_ms: Arc::new(StdAtomicU64::new(timer::now_millis())),
         })
     }
 
