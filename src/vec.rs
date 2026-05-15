@@ -10,7 +10,7 @@ use parking_lot::RwLock;
 
 use crate::desc::{Desc, Describer};
 use crate::errors::{Error, Result};
-use crate::metrics::{Collector, Metric};
+use crate::metrics::{Collector, Evictable, LastObserved, Metric};
 use crate::nohash::BuildNoHashHasher;
 use crate::proto::{MetricFamily, MetricType};
 
@@ -356,13 +356,48 @@ impl<T: MetricVecBuilder> Collector for MetricVec<T> {
     }
 }
 
+impl<T: MetricVecBuilder> MetricVec<T>
+where
+    T::M: LastObserved,
+{
+    /// Removes children whose `last_observed_ms` is strictly less than
+    /// `threshold_ms`. Returns the number of series removed.
+    ///
+    /// Holds the children write lock for the duration of the sweep.
+    /// Concurrent scrapes (`collect`) take the same lock for read and
+    /// will block briefly; concurrent observations either preceded the
+    /// lock (already recorded) or follow it (recreate the child).
+    pub fn evict_stale_before(&self, threshold_ms: u64) -> usize {
+        let mut children = self.v.children.write();
+        let before = children.len();
+        children.retain(|_, child| child.last_observed_ms() >= threshold_ms);
+        before - children.len()
+    }
+}
+
+impl<T: MetricVecBuilder> Evictable for MetricVec<T>
+where
+    T::M: LastObserved,
+{
+    fn evict_stale_before(&self, threshold_ms: u64) -> usize {
+        MetricVec::evict_stale_before(self, threshold_ms)
+    }
+
+    fn cardinality(&self) -> usize {
+        self.v.children.read().len()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use std::collections::HashMap;
 
-    use crate::counter::CounterVec;
+    use crate::counter::{CounterVec, IntCounterVec};
     use crate::gauge::GaugeVec;
-    use crate::metrics::{Metric, Opts};
+    use crate::histogram::{HistogramOpts, HistogramVec};
+    use crate::metrics::{Evictable, Metric, Opts};
+    use crate::timer;
+    use crate::vmhistogram::VMHistogramVec;
 
     #[test]
     fn test_counter_vec_with_labels() {
@@ -562,6 +597,146 @@ mod tests {
 
         assert!(vec.remove_label_values(&[v1.clone()]).is_err());
         assert!(vec.remove_label_values(&[v1.clone(), v3.clone()]).is_err());
+    }
+
+    #[test]
+    fn test_evict_stale_counter_vec() {
+        let vec = IntCounterVec::new(
+            Opts::new("test_evict_counter", "evict counter test"),
+            &["k"],
+        )
+        .unwrap();
+        vec.with_label_values(&["stale"]).inc();
+        vec.with_label_values(&["fresh"]).inc();
+        assert_eq!(vec.cardinality(), 2);
+
+        // Advance the clock past the stale observation so that the
+        // sweep threshold lands between the two writes.
+        let cutoff = timer::now_millis() + 1;
+        std::thread::sleep(std::time::Duration::from_millis(5));
+        vec.with_label_values(&["fresh"]).inc();
+
+        let removed = vec.evict_stale_before(cutoff);
+        assert_eq!(removed, 1);
+        assert_eq!(vec.cardinality(), 1);
+        // The surviving series is still readable.
+        assert_eq!(vec.with_label_values(&["fresh"]).get(), 2);
+    }
+
+    #[test]
+    fn test_evict_stale_histogram_vec() {
+        let vec = HistogramVec::new(
+            HistogramOpts::new("test_evict_histogram", "evict histogram test"),
+            &["k"],
+        )
+        .unwrap();
+        vec.with_label_values(&["stale"]).observe(0.5);
+        vec.with_label_values(&["fresh"]).observe(0.5);
+        assert_eq!(vec.cardinality(), 2);
+
+        let cutoff = timer::now_millis() + 1;
+        std::thread::sleep(std::time::Duration::from_millis(5));
+        vec.with_label_values(&["fresh"]).observe(0.5);
+
+        assert_eq!(vec.evict_stale_before(cutoff), 1);
+        assert_eq!(vec.cardinality(), 1);
+    }
+
+    #[test]
+    fn test_evict_stale_vmhistogram_vec() {
+        let vec = VMHistogramVec::new(
+            Opts::new("test_evict_vmhistogram", "evict vmhistogram test"),
+            &["k"],
+        )
+        .unwrap();
+        vec.with_label_values(&["stale"]).observe(1.0);
+        vec.with_label_values(&["fresh"]).observe(1.0);
+        assert_eq!(vec.cardinality(), 2);
+
+        let cutoff = timer::now_millis() + 1;
+        std::thread::sleep(std::time::Duration::from_millis(5));
+        vec.with_label_values(&["fresh"]).observe(1.0);
+
+        assert_eq!(vec.evict_stale_before(cutoff), 1);
+        assert_eq!(vec.cardinality(), 1);
+    }
+
+    #[test]
+    fn test_evict_stale_gauge_vec() {
+        let vec = GaugeVec::new(Opts::new("test_evict_gauge", "evict gauge test"), &["k"]).unwrap();
+        vec.with_label_values(&["stale"]).set(1.0);
+        vec.with_label_values(&["fresh"]).set(1.0);
+
+        let cutoff = timer::now_millis() + 1;
+        std::thread::sleep(std::time::Duration::from_millis(5));
+        vec.with_label_values(&["fresh"]).set(2.0);
+
+        assert_eq!(vec.evict_stale_before(cutoff), 1);
+        assert_eq!(vec.cardinality(), 1);
+    }
+
+    #[test]
+    fn test_evict_via_dyn_evictable() {
+        let cv = IntCounterVec::new(Opts::new("dyn_evict_counter", "h"), &["k"]).unwrap();
+        cv.with_label_values(&["a"]).inc();
+        let hv = HistogramVec::new(HistogramOpts::new("dyn_evict_histogram", "h"), &["k"]).unwrap();
+        hv.with_label_values(&["a"]).observe(0.5);
+
+        let evictables: Vec<std::sync::Arc<dyn Evictable>> = vec![
+            std::sync::Arc::new(cv.clone()),
+            std::sync::Arc::new(hv.clone()),
+        ];
+
+        let cutoff = timer::now_millis() + 1;
+        std::thread::sleep(std::time::Duration::from_millis(5));
+        let removed: usize = evictables
+            .iter()
+            .map(|e| e.evict_stale_before(cutoff))
+            .sum();
+        assert_eq!(removed, 2);
+        assert_eq!(cv.cardinality(), 0);
+        assert_eq!(hv.cardinality(), 0);
+    }
+
+    #[test]
+    fn test_evict_concurrent_observe() {
+        use std::sync::{Arc, Barrier};
+        use std::thread;
+        let vec =
+            Arc::new(IntCounterVec::new(Opts::new("test_evict_concurrent", "h"), &["k"]).unwrap());
+        // Pre-create both label sets.
+        vec.with_label_values(&["alive"]).inc();
+        vec.with_label_values(&["doomed"]).inc();
+
+        let barrier = Arc::new(Barrier::new(2));
+        let writer = {
+            let vec = Arc::clone(&vec);
+            let barrier = Arc::clone(&barrier);
+            thread::spawn(move || {
+                barrier.wait();
+                for _ in 0..10_000 {
+                    vec.with_label_values(&["alive"]).inc();
+                }
+            })
+        };
+        let evicter = {
+            let vec = Arc::clone(&vec);
+            let barrier = Arc::clone(&barrier);
+            thread::spawn(move || {
+                barrier.wait();
+                let mut total = 0;
+                for _ in 0..50 {
+                    // Evict anything older than "now", which excludes
+                    // anything the writer just touched.
+                    total += vec.evict_stale_before(timer::now_millis());
+                }
+                total
+            })
+        };
+        writer.join().unwrap();
+        evicter.join().unwrap();
+        // The actively-written series must survive every sweep round.
+        assert!(vec.with_label_values(&["alive"]).get() >= 10_000);
     }
 
     #[test]

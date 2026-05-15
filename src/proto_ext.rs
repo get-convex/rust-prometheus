@@ -279,4 +279,3 @@ impl From<MetricType> for Option<EnumOrUnknown<MetricType>> {
         Some(EnumOrUnknown::from(value))
     }
 }
-

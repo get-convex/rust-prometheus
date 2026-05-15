@@ -13,8 +13,9 @@ use std::time::{Duration, Instant as StdInstant};
 use crate::atomic64::{Atomic, AtomicF64, AtomicU64};
 use crate::desc::{Desc, Describer};
 use crate::errors::{Error, Result};
-use crate::metrics::{Collector, LocalMetric, Metric, Opts};
+use crate::metrics::{Collector, LastObserved, LocalMetric, Metric, Opts};
 use crate::proto;
+use crate::timer;
 use crate::value::make_label_pairs;
 use crate::vec::{MetricVec, MetricVecBuilder};
 
@@ -325,6 +326,11 @@ pub struct HistogramCore {
     shards: [Shard; 2],
 
     upper_bounds: Vec<f64>,
+
+    /// Milliseconds (on the [`timer::now_millis`] clock) of the most
+    /// recent observation. Used by the [`Evictable`](crate::core::Evictable)
+    /// sweep to drop idle label sets.
+    last_observed_ms: StdAtomicU64,
 }
 
 impl HistogramCore {
@@ -352,7 +358,15 @@ impl HistogramCore {
             shards: [Shard::new(buckets.len()), Shard::new(buckets.len())],
 
             upper_bounds: buckets,
+
+            last_observed_ms: StdAtomicU64::new(0),
         })
+    }
+
+    /// Returns the millisecond timestamp of the most recent
+    /// observation on the [`timer::now_millis`] clock.
+    pub(crate) fn last_observed_ms(&self) -> u64 {
+        self.last_observed_ms.load(Ordering::Relaxed)
     }
 
     /// Record a given observation (f64) in the histogram.
@@ -369,6 +383,9 @@ impl HistogramCore {
         // To ensure the above, this `inc` needs to use `Acquire` ordering to
         // force anything below this line to stay below it.
         let (shard_index, _count) = self.shard_and_count.inc(Ordering::Acquire);
+
+        self.last_observed_ms
+            .store(timer::now_millis(), Ordering::Relaxed);
 
         let shard: &Shard = &self.shards[usize::from(shard_index)];
 
@@ -773,6 +790,12 @@ impl Collector for Histogram {
         m.set_metric(vec![self.metric()]);
 
         vec![m]
+    }
+}
+
+impl LastObserved for Histogram {
+    fn last_observed_ms(&self) -> u64 {
+        self.core.last_observed_ms()
     }
 }
 

@@ -193,7 +193,7 @@ pub mod core {
     };
     pub use super::desc::{Desc, Describer};
     pub use super::gauge::{GenericGauge, GenericGaugeVec};
-    pub use super::metrics::{Collector, Metric, Opts};
+    pub use super::metrics::{Collector, Evictable, LastObserved, Metric, Opts};
     pub use super::vec::{MetricVec, MetricVecBuilder};
 }
 

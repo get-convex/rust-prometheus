@@ -77,9 +77,12 @@ mod tests {
 
     #[test]
     fn test_time_update() {
-        assert_eq!(super::recent_millis(), 0);
+        // RECENT is process-global and any other test that touches a
+        // metric (which now records `last_observed_ms` via
+        // `now_millis`) will have already advanced it, so we don't
+        // assert it starts at zero.
         let now = super::now_millis();
-        assert_eq!(super::recent_millis(), now);
+        assert!(super::recent_millis() >= now);
         super::ensure_updater();
         thread::sleep(super::CHECK_UPDATE_INTERVAL * 2);
         assert!(super::recent_millis() > now);

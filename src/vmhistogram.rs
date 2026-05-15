@@ -22,6 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+use std::sync::atomic::{AtomicU64 as StdAtomicU64, Ordering};
 use std::sync::Arc;
 
 use lazy_static::lazy_static;
@@ -32,7 +33,9 @@ use crate::{
         Atomic, AtomicF64, AtomicU64, Collector, Desc, Describer, Metric, MetricVec,
         MetricVecBuilder,
     },
+    metrics::LastObserved,
     proto::{self, LabelPair},
+    timer,
     value::make_label_pairs,
     Opts,
 };
@@ -101,6 +104,11 @@ pub struct VMHistogram {
     inner: Arc<RwLock<Inner>>,
     desc: Arc<Desc>,
     label_pairs: Arc<Vec<LabelPair>>,
+    /// Milliseconds (on the [`timer::now_millis`] clock) of the most
+    /// recent observation. Lives outside the inner `RwLock` so the
+    /// `observe` hot path doesn't have to wait on the lock to record
+    /// activity.
+    last_observed_ms: Arc<StdAtomicU64>,
 }
 
 impl VMHistogram {
@@ -120,6 +128,7 @@ impl VMHistogram {
             inner: Default::default(),
             desc: Arc::new(desc),
             label_pairs: Arc::new(label_pairs),
+            last_observed_ms: Arc::new(StdAtomicU64::new(0)),
         })
     }
 
@@ -129,6 +138,8 @@ impl VMHistogram {
         if value.is_nan() || value < 0.0 {
             return;
         }
+        self.last_observed_ms
+            .store(timer::now_millis(), Ordering::Relaxed);
         let bucket_idx = (value.log10() - E_10_MIN as f64) * BUCKETS_PER_DECIMAL as f64;
         let inner = self.inner.read();
         inner.sum.inc_by(value);
@@ -188,6 +199,12 @@ impl Metric for VMHistogram {
         let h = self.proto();
         m.set_vm_histogram(h);
         m
+    }
+}
+
+impl LastObserved for VMHistogram {
+    fn last_observed_ms(&self) -> u64 {
+        self.last_observed_ms.load(Ordering::Relaxed)
     }
 }
 
