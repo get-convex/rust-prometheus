@@ -7,7 +7,7 @@ use std::sync::Arc;
 use crate::atomic64::{Atomic, AtomicF64, AtomicI64, Number};
 use crate::desc::Desc;
 use crate::errors::Result;
-use crate::metrics::{Collector, Metric, Opts};
+use crate::metrics::{Collector, LastObserved, Metric, Opts};
 use crate::proto;
 use crate::value::{Value, ValueType};
 use crate::vec::{MetricVec, MetricVecBuilder};
@@ -103,6 +103,12 @@ impl<P: Atomic> Collector for GenericGauge<P> {
 impl<P: Atomic> Metric for GenericGauge<P> {
     fn metric(&self) -> proto::Metric {
         self.v.metric()
+    }
+}
+
+impl<P: Atomic> LastObserved for GenericGauge<P> {
+    fn last_observed_ms(&self) -> u64 {
+        self.v.last_observed_ms()
     }
 }
 

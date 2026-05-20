@@ -1,10 +1,13 @@
 // Copyright 2014 The Prometheus Authors
 // Copyright 2019 TiKV Project Authors. Licensed under Apache-2.0.
 
+use std::sync::atomic::{AtomicU64 as StdAtomicU64, Ordering};
+
 use crate::atomic64::{Atomic, Number};
 use crate::desc::{Desc, Describer};
 use crate::errors::{Error, Result};
 use crate::proto::{Counter, Gauge, LabelPair, Metric, MetricFamily, MetricType};
+use crate::timer;
 
 /// `ValueType` is an enumeration of metric types that represent a simple value
 /// for [`Counter`] and [`Gauge`].
@@ -34,6 +37,11 @@ pub struct Value<P: Atomic> {
     pub val: P,
     pub val_type: ValueType,
     pub label_pairs: Vec<LabelPair>,
+    /// Milliseconds (on the [`timer::now_millis`] clock) of the most
+    /// recent write. Updated on every `set`/`inc_by`/`dec_by`. Used by
+    /// the [`Evictable`](crate::core::Evictable) sweep on metric
+    /// vectors.
+    pub last_observed_ms: StdAtomicU64,
 }
 
 impl<P: Atomic> Value<P> {
@@ -51,6 +59,7 @@ impl<P: Atomic> Value<P> {
             val: P::new(val),
             val_type,
             label_pairs,
+            last_observed_ms: StdAtomicU64::new(timer::now_millis()),
         })
     }
 
@@ -62,11 +71,13 @@ impl<P: Atomic> Value<P> {
     #[inline]
     pub fn set(&self, val: P::T) {
         self.val.set(val);
+        self.touch();
     }
 
     #[inline]
     pub fn inc_by(&self, val: P::T) {
         self.val.inc_by(val);
+        self.touch();
     }
 
     #[inline]
@@ -81,7 +92,19 @@ impl<P: Atomic> Value<P> {
 
     #[inline]
     pub fn dec_by(&self, val: P::T) {
-        self.val.dec_by(val)
+        self.val.dec_by(val);
+        self.touch();
+    }
+
+    #[inline]
+    fn touch(&self) {
+        self.last_observed_ms
+            .store(timer::now_millis(), Ordering::Relaxed);
+    }
+
+    #[inline]
+    pub fn last_observed_ms(&self) -> u64 {
+        self.last_observed_ms.load(Ordering::Relaxed)
     }
 
     pub fn metric(&self) -> Metric {

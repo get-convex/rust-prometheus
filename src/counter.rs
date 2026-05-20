@@ -9,7 +9,7 @@ use std::sync::Arc;
 use crate::atomic64::{Atomic, AtomicF64, AtomicU64, Number};
 use crate::desc::Desc;
 use crate::errors::Result;
-use crate::metrics::{Collector, LocalMetric, Metric, Opts};
+use crate::metrics::{Collector, LastObserved, LocalMetric, Metric, Opts};
 use crate::proto;
 use crate::value::{Value, ValueType};
 use crate::vec::{MetricVec, MetricVecBuilder};
@@ -100,6 +100,12 @@ impl<P: Atomic> Collector for GenericCounter<P> {
 impl<P: Atomic> Metric for GenericCounter<P> {
     fn metric(&self) -> proto::Metric {
         self.v.metric()
+    }
+}
+
+impl<P: Atomic> LastObserved for GenericCounter<P> {
+    fn last_observed_ms(&self) -> u64 {
+        self.v.last_observed_ms()
     }
 }
 

@@ -27,6 +27,44 @@ pub trait Metric: Sync + Send + Clone {
     fn metric(&self) -> proto::Metric;
 }
 
+/// A [`Metric`] that records when it was most recently written to.
+///
+/// Implemented by metric types that update an atomic timestamp on every
+/// observation (`observe`/`inc`/`set`/...). Used together with
+/// [`Evictable`] on [`MetricVec`](crate::core::MetricVec) to drop label
+/// sets that have gone idle.
+///
+/// The timestamp uses the same clock as [`crate::timer::now_millis`]:
+/// milliseconds since a fixed per-process anchor (process start).
+pub trait LastObserved {
+    /// Returns the millisecond timestamp of the most recent write to
+    /// this metric, on the [`crate::timer::now_millis`] clock.
+    /// Initialized to the creation time so a newly-created (but
+    /// not-yet-written) child is not immediately swept.
+    fn last_observed_ms(&self) -> u64;
+}
+
+/// A collection of metric series that supports bulk removal of label
+/// sets whose backing [`LastObserved`] timestamp is older than a
+/// threshold.
+///
+/// Implemented for [`MetricVec<T>`](crate::core::MetricVec) when
+/// `T::M: LastObserved`. Trait objects (`Arc<dyn Evictable>`) let a
+/// downstream sweeper hold a heterogeneous list of metric vectors and
+/// call [`evict_stale_before`](Self::evict_stale_before) on each
+/// without knowing their concrete type.
+pub trait Evictable: Sync + Send {
+    /// Removes children whose `last_observed_ms` is strictly less than
+    /// `threshold_ms`. Returns the number of series removed.
+    ///
+    /// `threshold_ms` is on the [`crate::timer::now_millis`] clock.
+    /// A typical caller computes it as `now_millis() - ttl.as_millis()`.
+    fn evict_stale_before(&self, threshold_ms: u64) -> usize;
+
+    /// Returns the current number of live label sets.
+    fn cardinality(&self) -> usize;
+}
+
 /// An interface models a Metric only usable in single thread environment.
 pub trait LocalMetric {
     /// Flush the local metrics to the global one.
